@@ -9,7 +9,9 @@ class AppState {
     this.currentTextId = localStorage.getItem('trika_current_text') || 'stava_cintamani';
     this.currentVerseOrder = parseInt(localStorage.getItem(`trika_last_verse_${this.currentTextId}`) || '1', 10);
     this.bookmarks = new Set(JSON.parse(localStorage.getItem(`trika_bookmarks_${this.currentTextId}`) || '[]'));
-    this.theme = localStorage.getItem('trika_theme') || 'default';
+    // Default to 'light' (शुभ्र ज्योति) as requested
+    const savedTheme = localStorage.getItem('trika_theme_v2');
+    this.theme = savedTheme || 'light';
     this.fontScale = parseFloat(localStorage.getItem('trika_font_scale') || '1.0');
     // Default to true (Sharada separator in Mūla Shloka) as requested
     const savedSep = localStorage.getItem('trika_use_sharada_separator_v2');
@@ -40,6 +42,7 @@ class AppState {
 
   savePreferences() {
     localStorage.setItem('trika_theme', this.theme);
+    localStorage.setItem('trika_theme_v2', this.theme);
     localStorage.setItem('trika_font_scale', this.fontScale.toString());
     localStorage.setItem('trika_use_sharada_separator', this.useSharadaSeparator.toString());
     localStorage.setItem('trika_use_sharada_separator_v2', this.useSharadaSeparator.toString());
@@ -199,10 +202,16 @@ class AppState {
 
     const isBookmarked = this.bookmarks.has(verse.order);
 
+    const isCommentaryCollapsed = Boolean(
+      this.collapsedSections['vivriti'] !== undefined 
+        ? this.collapsedSections['vivriti'] 
+        : this.collapsedSections['avataranika']
+    );
+
     contentArea.innerHTML = `
-      ${UI.renderSlokaCard(verse, isBookmarked, this.useSharadaSeparator)}
+      ${UI.renderSlokaCard(verse, isBookmarked, this.useSharadaSeparator, isCommentaryCollapsed)}
       ${UI.renderAnvayaCard(verse, this.collapsedSections['anvaya'])}
-      ${UI.renderVivritiCard(verse, this.collapsedSections['vivriti'], this.useSharadaSeparator)}
+      ${UI.renderVivritiCard(verse, isCommentaryCollapsed, this.useSharadaSeparator)}
     `;
 
     // Reattach inner card button events

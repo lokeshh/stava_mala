@@ -821,13 +821,24 @@ h1, h2, h3, h4, h5 {
   padding: 0.35rem 0.85rem;
   margin-bottom: 1.25rem;
   text-align: left;
+  transition: all 0.2s ease;
 }
 
 .avataranika-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
   margin-bottom: 0.3rem;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.15rem 0;
+}
+
+.avataranika-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .avataranika-tag {
@@ -839,6 +850,28 @@ h1, h2, h3, h4, h5 {
   border: 1px solid var(--border-subtle);
   padding: 0.12rem 0.5rem;
   border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.avataranika-header:hover .avataranika-tag {
+  border-color: var(--color-saffron);
+  color: var(--text-primary);
+}
+
+.avataranika-header:hover .card-toggle-icon {
+  color: var(--color-saffron);
+}
+
+.avataranika-wrap.collapsed {
+  margin-bottom: 0.75rem;
+}
+
+.avataranika-wrap.collapsed .avataranika-text {
+  display: none;
+}
+
+.avataranika-wrap.collapsed .card-toggle-icon {
+  transform: rotate(-90deg);
 }
 
 .avataranika-text {

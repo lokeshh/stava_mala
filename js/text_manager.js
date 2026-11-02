@@ -48,20 +48,22 @@ class TextManager {
     if (!text || !text.verses) return [];
     if (!query || query.trim() === '') return text.verses;
 
-    const q = query.trim().toLowerCase();
+    const norm = (s) => (s || '').replace(/,/gu, ' ').replace(/\s+/gu, ' ').toLowerCase();
+    const q = norm(query.trim());
+
     return text.verses.filter(v => {
       // Check verse order or tag
       if (String(v.order) === q || v.number.includes(q) || (v.tag && v.tag.includes(q))) {
         return true;
       }
       // Check sloka text
-      if (v.sloka && v.sloka.toLowerCase().includes(q)) return true;
+      if (v.sloka && norm(v.sloka).includes(q)) return true;
       // Check avataranika
-      if (v.avataranika && v.avataranika.toLowerCase().includes(q)) return true;
+      if (v.avataranika && norm(v.avataranika).includes(q)) return true;
       // Check anvaya
-      if (v.anvaya && v.anvaya.toLowerCase().includes(q)) return true;
+      if (v.anvaya && norm(v.anvaya).includes(q)) return true;
       // Check vivriti commentary
-      if (v.vivriti && v.vivriti.toLowerCase().includes(q)) return true;
+      if (v.vivriti && norm(v.vivriti).includes(q)) return true;
       return false;
     });
   }
