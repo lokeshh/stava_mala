@@ -1,0 +1,17 @@
+/* Fonts Definition for Trika Stava SPA */
+
+@font-face {
+  font-family: 'Siddhanta';
+  src: url('../fonts/siddhanta.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Devanagari Typography Utilities */
+.siddhanta-font {
+  font-family: 'Siddhanta', 'Noto Sans Devanagari', 'Kokila', 'Sanskrit Text', serif;
+  font-feature-settings: "kern" 1, "liga" 1, "clig" 1, "dlig" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}

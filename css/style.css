@@ -1,0 +1,1312 @@
+/* Trika Stava SPA Main Stylesheet */
+@import url('fonts.css');
+
+:root {
+  /* Default Theme: Kashmir Shaiva (Sandalwood & Saffron Slate) */
+  --bg-primary: #12151c;
+  --bg-secondary: #1a1e27;
+  --bg-card: #202633;
+  --bg-card-hover: #262e3d;
+  --bg-accent: #2e1e23;
+  --border-subtle: #2d3546;
+  --border-accent: #b3543b;
+  --border-gold: #c99a4c;
+  
+  --text-primary: #f2f5f9;
+  --text-secondary: #b5c0d0;
+  --text-muted: #7e8b9f;
+  --text-accent: #f27958;
+  --text-gold: #f4ca64;
+  
+  --color-saffron: #d9532f;
+  --color-saffron-light: #fbeae5;
+  --color-gold: #d4af37;
+  --color-rudraksha: #5c2c16;
+  --color-success: #38a169;
+  --color-info: #3182ce;
+  
+  --font-sanskrit: 'Siddhanta', 'Noto Sans Devanagari', 'Kokila', serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 0 16px rgba(217, 83, 47, 0.25);
+  
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  
+  --sloka-font-size: 2.1rem;
+  --anvaya-font-size: 1.35rem;
+  --vishayartha-font-size: 1.12rem;
+  --avataranika-font-size: 1.08rem;
+  --vivriti-font-size: 1.18rem;
+}
+
+/* Theme: Bhūrjapatra (Birchbark Parchment) */
+[data-theme="parchment"] {
+  --bg-primary: #f5eedc;
+  --bg-secondary: #eee4cb;
+  --bg-card: #fffbf2;
+  --bg-card-hover: #faf3e1;
+  --bg-accent: #fae8d4;
+  --border-subtle: #dfd3b8;
+  --border-accent: #a84824;
+  --border-gold: #9f722a;
+  
+  --text-primary: #2c221a;
+  --text-secondary: #5e4c3e;
+  --text-muted: #8c7766;
+  --text-accent: #9a3212;
+  --text-gold: #825b1b;
+  
+  --shadow-sm: 0 2px 4px rgba(80, 50, 20, 0.08);
+  --shadow-md: 0 4px 12px rgba(80, 50, 20, 0.12);
+  --shadow-lg: 0 8px 24px rgba(80, 50, 20, 0.16);
+  --shadow-glow: 0 0 16px rgba(168, 72, 36, 0.15);
+}
+
+/* Theme: Kailash Nisha (Deep Dark) */
+[data-theme="dark"] {
+  --bg-primary: #0a0c10;
+  --bg-secondary: #10141d;
+  --bg-card: #151b26;
+  --bg-card-hover: #1c2433;
+  --bg-accent: #1f1d2b;
+  --border-subtle: #20293a;
+  --border-accent: #e06847;
+  --border-gold: #e2b358;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+  --text-accent: #fb923c;
+  --text-gold: #fde047;
+}
+
+/* Theme: Shubhram (Clean Paper Light) */
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #edf2f7;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-accent: #fee2e2;
+  --border-subtle: #e2e8f0;
+  --border-accent: #dc2626;
+  --border-gold: #d97706;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-accent: #b91c1c;
+  --text-gold: #b45309;
+  
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 10px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 20px rgba(0,0,0,0.12);
+  --shadow-glow: 0 0 12px rgba(220, 38, 38, 0.1);
+}
+
+/* Theme: Neela Jyoti (Serene Light Blue/Purple - Chidakasha) */
+[data-theme="neela_jyoti"] {
+  --bg-primary: #f8faff;
+  --bg-secondary: #edf2ff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f5f3ff;
+  --bg-accent: #ede9fe;
+  --border-subtle: #e0e7ff;
+  --border-accent: #6366f1;
+  --border-gold: #8b5cf6;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-accent: #4338ca;
+  --text-gold: #6d28d9;
+  
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 10px rgba(67, 56, 202, 0.08);
+  --shadow-lg: 0 8px 20px rgba(67, 56, 202, 0.12);
+  --shadow-glow: 0 0 14px rgba(99, 102, 241, 0.15);
+}
+
+/* Theme: Sharada Vana (Kashmiri Pine & Deodar Forest) */
+[data-theme="forest"] {
+  --bg-primary: #0b140f;
+  --bg-secondary: #122019;
+  --bg-card: #182a21;
+  --bg-card-hover: #1f352a;
+  --bg-accent: #193125;
+  --border-subtle: #274334;
+  --border-accent: #38a169;
+  --border-gold: #d69e2e;
+
+  --text-primary: #f0f7f2;
+  --text-secondary: #b7d6c2;
+  --text-muted: #71957e;
+  --text-accent: #48bb78;
+  --text-gold: #ecc94b;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 16px rgba(56, 161, 105, 0.25);
+}
+
+/* Theme: Bhairava Sandhya (Twilight Midnight & Copper) */
+[data-theme="twilight"] {
+  --bg-primary: #090d1a;
+  --bg-secondary: #0f1629;
+  --bg-card: #16203a;
+  --bg-card-hover: #1d2a4c;
+  --bg-accent: #231c38;
+  --border-subtle: #24335c;
+  --border-accent: #e27d53;
+  --border-gold: #f6c85f;
+
+  --text-primary: #f2f5fd;
+  --text-secondary: #b6c4e5;
+  --text-muted: #7282a8;
+  --text-accent: #f97316;
+  --text-gold: #fcd34d;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 0 16px rgba(226, 125, 83, 0.25);
+}
+
+/* Theme: Kashmir Kunkuma (Kashmiri Saffron & Sandalwood) */
+[data-theme="saffron"] {
+  --bg-primary: #1c100a;
+  --bg-secondary: #27170f;
+  --bg-card: #331e13;
+  --bg-card-hover: #402619;
+  --bg-accent: #441e10;
+  --border-subtle: #573322;
+  --border-accent: #ea580c;
+  --border-gold: #f59e0b;
+
+  --text-primary: #fff7ed;
+  --text-secondary: #fed7aa;
+  --text-muted: #a37c67;
+  --text-accent: #fb923c;
+  --text-gold: #fde047;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 16px rgba(234, 88, 12, 0.3);
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5 {
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.sanskrit {
+  font-family: var(--font-sanskrit);
+  letter-spacing: 0.02em;
+  font-feature-settings: "kern" 1, "liga" 1, "clig" 1, "dlig" 1;
+}
+
+/* Header */
+.app-header {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(8px);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--bg-accent);
+  border: 1.5px solid var(--border-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-accent);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.brand-icon:hover {
+  transform: scale(1.08) rotate(3deg);
+  border-color: var(--border-accent);
+  color: var(--text-gold);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-glow);
+}
+
+.brand-icon .trishula-icon {
+  width: 25px;
+  height: 25px;
+  fill: currentColor;
+  transition: fill 0.3s ease, transform 0.3s ease;
+  display: block;
+}
+
+.brand-icon img,
+.brand-icon svg {
+  display: block;
+}
+
+.brand-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.03em;
+}
+
+.brand-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Text Selector */
+.text-selector-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.text-selector {
+  appearance: none;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 2.2rem 0.5rem 0.9rem;
+  font-size: 0.95rem;
+  font-family: var(--font-sanskrit);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.text-selector:hover, .text-selector:focus {
+  border-color: var(--border-accent);
+  outline: none;
+  box-shadow: var(--shadow-glow);
+}
+
+.select-arrow {
+  position: absolute;
+  right: 0.8rem;
+  pointer-events: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+/* Header Actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-btn {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  border-color: var(--border-accent);
+  transform: translateY(-1px);
+}
+
+.icon-btn.active {
+  background: var(--border-accent);
+  color: #fff;
+  border-color: var(--border-accent);
+}
+
+/* Main Container */
+.main-content {
+  flex: 1;
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Info Bar */
+.text-meta-banner {
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--border-accent);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.meta-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.text-title-large {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-gold);
+}
+
+.text-author-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.meta-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.badge-saffron {
+  background: rgba(217, 83, 47, 0.15);
+  border-color: var(--border-accent);
+  color: var(--text-accent);
+}
+
+/* Progress & Sloka Navigation Bar */
+.sloka-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-jump-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.jump-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.jump-input {
+  width: 60px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.5rem;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.jump-input:focus {
+  outline: none;
+  border-color: var(--border-accent);
+}
+
+.jump-btn {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.jump-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-accent);
+}
+
+.nav-progress-wrap {
+  flex: 1;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.progress-text-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.progress-track {
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-saffron), var(--color-gold));
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+/* Main Sloka Card */
+.sloka-display-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.sloka-display-card::before {
+  content: "ॐ";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  color: var(--text-gold);
+  padding: 0 0.8rem;
+  font-family: var(--font-sanskrit);
+  font-size: 1.35rem;
+  line-height: 1.1;
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+.sloka-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed var(--border-subtle);
+}
+
+.sloka-num-badge {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-accent);
+  background: rgba(217, 83, 47, 0.1);
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(217, 83, 47, 0.3);
+}
+
+.ms-tag {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.sloka-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sloka-text-box {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 1.5rem auto 2rem auto;
+  line-height: 1.9;
+  text-align: left;
+}
+
+.sloka-line {
+  font-size: var(--sloka-font-size);
+  color: var(--text-primary);
+  font-weight: normal;
+  display: block;
+  margin-bottom: 0.4rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  text-align: left;
+}
+
+.sloka-meter-tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  margin-top: 0.5rem;
+}
+
+/* Nav Arrows Row */
+.sloka-nav-arrows {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.nav-arrow-btn {
+  flex: 1;
+  max-width: 220px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-arrow-btn:hover:not(:disabled) {
+  background: var(--border-accent);
+  color: #fff;
+  border-color: var(--border-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+.nav-arrow-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.key-hint {
+  font-size: 0.72rem;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Tabs & Sections Navigation */
+.view-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.5rem;
+  overflow-x: auto;
+}
+
+.view-tab {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.view-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+
+.view-tab.active {
+  color: var(--text-gold);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Accordion / Card Sections */
+.detail-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.detail-card:hover {
+  border-color: var(--border-accent);
+}
+
+/* Special Highlighting for Anvaya */
+.anvaya-card {
+  border-left: 4px solid var(--color-gold);
+  background: linear-gradient(180deg, var(--bg-card), var(--bg-secondary));
+  box-shadow: var(--shadow-md);
+}
+
+/* Kṣemarāja's Vivṛti Commentary Card */
+.vivriti-card {
+  border-left: 4px solid var(--border-accent);
+  background: linear-gradient(180deg, var(--bg-card), var(--bg-secondary));
+  box-shadow: var(--shadow-md);
+}
+
+.vivriti-title {
+  color: var(--text-accent);
+  font-size: 1.15rem;
+}
+
+.vivriti-body {
+  padding: 1.25rem 1.5rem;
+}
+
+.vivriti-para {
+  font-size: var(--vivriti-font-size);
+  line-height: 1.85;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.vivriti-para:last-child {
+  margin-bottom: 0;
+}
+
+/* Pratīka (Root Verse Words Quoted in Commentary before Hyphen) */
+.pratika-bold,
+.vivriti-para strong,
+.avataranika-text strong,
+.vishayartha-text strong {
+  font-weight: 700;
+  color: var(--text-accent);
+  letter-spacing: 0.02em;
+}
+
+/* मूलश्लोकानां संक्षेपेण विषयार्थसंग्रहः (Thematic Purport with Special Accent Background) */
+.vishayartha-wrap {
+  background: var(--bg-accent);
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--border-accent);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 1.25rem;
+  text-align: left;
+}
+
+.vishayartha-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.vishayartha-tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-accent);
+  background: var(--bg-card);
+  border: 1px solid var(--border-accent);
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.02em;
+}
+
+.vishayartha-text {
+  font-size: var(--vishayartha-font-size);
+  line-height: 1.8;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Avataraṇikā (Introductory Context by Kṣemarāja - clean without special background) */
+.avataranika-wrap {
+  background: transparent;
+  border: none;
+  border-left: 3px solid var(--border-subtle);
+  border-radius: 0;
+  padding: 0.35rem 0.85rem;
+  margin-bottom: 1.25rem;
+  text-align: left;
+}
+
+.avataranika-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.avataranika-tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  padding: 0.12rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.avataranika-text {
+  font-size: var(--avataranika-font-size);
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+/* Separator Toggle Button */
+.separator-toggle-btn {
+  font-size: 0.82rem;
+  padding: 0 0.65rem;
+  height: 38px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-sanskrit);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.separator-toggle-btn:hover {
+  border-color: var(--border-accent);
+  color: var(--text-primary);
+}
+
+.separator-toggle-btn.active {
+  background: rgba(217, 83, 47, 0.15);
+  color: var(--text-accent);
+  border-color: var(--border-accent);
+}
+
+.card-header {
+  padding: 0.85rem 1.25rem;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.anvaya-title {
+  color: var(--text-gold);
+  font-size: 1.15rem;
+}
+
+.card-badge {
+  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-primary);
+  color: var(--text-muted);
+}
+
+.card-toggle-icon {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
+
+.detail-card.collapsed .card-toggle-icon {
+  transform: rotate(-90deg);
+}
+
+.detail-card.collapsed .card-body {
+  display: none;
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+/* Anvaya Content */
+.anvaya-content {
+  font-size: var(--anvaya-font-size);
+  line-height: 1.85;
+  color: var(--text-primary);
+}
+
+.anvaya-highlight {
+  background: rgba(212, 175, 55, 0.1);
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+/* Padaccheda Word Chips */
+.padaccheda-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  line-height: 1.8;
+}
+
+.pada-chip {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.7rem;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.pada-chip:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-gold);
+  color: var(--text-gold);
+}
+
+/* Translations */
+.translation-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+
+.translation-en-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  font-style: normal;
+}
+
+/* Samasa Table */
+.samasa-table-wrap {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.data-table th {
+  background: var(--bg-secondary);
+  color: var(--text-gold);
+  font-weight: 600;
+}
+
+.data-table tr:hover td {
+  background: var(--bg-card-hover);
+}
+
+/* Word Meanings Grid */
+.meanings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.meaning-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+}
+
+.meaning-sanskrit {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-gold);
+  margin-bottom: 0.25rem;
+}
+
+.meaning-hi {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  margin-bottom: 0.15rem;
+}
+
+.meaning-en {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Philosophical Commentary Notes */
+.notes-content {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  border-left: 3px solid var(--color-saffron);
+  padding-left: 1rem;
+  background: var(--bg-secondary);
+  padding: 0.85rem 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  max-width: 720px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  transform: translateY(15px);
+  transition: transform 0.2s ease;
+}
+
+.modal-overlay.open .modal-container {
+  transform: translateY(0);
+}
+
+.modal-header {
+  padding: 1rem 1.5rem;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-gold);
+}
+
+.modal-body {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 0.85rem 1.5rem;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+/* Sloka Grid in Modal */
+.toc-search-box {
+  margin-bottom: 1rem;
+}
+
+.toc-search-input {
+  width: 100%;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 1rem;
+  font-size: 0.95rem;
+}
+
+.toc-search-input:focus {
+  outline: none;
+  border-color: var(--border-accent);
+}
+
+.sloka-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 0.5rem;
+}
+
+.grid-sloka-item {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.3rem;
+  text-align: center;
+  font-family: var(--font-sanskrit);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.grid-sloka-item:hover {
+  background: var(--border-accent);
+  color: #fff;
+  border-color: var(--border-accent);
+  transform: scale(1.05);
+}
+
+.grid-sloka-item.active {
+  background: var(--color-gold);
+  color: #000;
+  border-color: var(--color-gold);
+}
+
+.grid-sloka-item.bookmarked {
+  border-color: var(--color-gold);
+  position: relative;
+}
+
+.grid-sloka-item.bookmarked::after {
+  content: "★";
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 0.65rem;
+  color: var(--color-gold);
+}
+
+/* Edit Mode Form */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+
+.form-textarea, .form-input {
+  width: 100%;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.form-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.form-textarea:focus, .form-input:focus {
+  outline: none;
+  border-color: var(--border-accent);
+}
+
+/* Toast Notification */
+.toast-notice {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-full);
+  padding: 0.6rem 1.4rem;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toast-notice.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* Footer */
+.app-footer {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
+  padding: 1.5rem 1rem;
+  margin-top: auto;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.footer-quote {
+  font-family: var(--font-sanskrit);
+  font-size: 1.05rem;
+  color: var(--text-gold);
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  :root {
+    --sloka-font-size: 1.6rem;
+    --anvaya-font-size: 1.2rem;
+    --vishayartha-font-size: 1.02rem;
+    --avataranika-font-size: 0.98rem;
+    --vivriti-font-size: 1.05rem;
+  }
+  
+  .header-container {
+    padding: 0.6rem 1rem;
+  }
+  
+  .brand-sub {
+    display: none;
+  }
+  
+  .sloka-display-card {
+    padding: 1.8rem 1.2rem;
+  }
+  
+  .sloka-nav-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .nav-progress-wrap {
+    max-width: 100%;
+  }
+  
+  .sloka-nav-arrows {
+    flex-direction: row;
+  }
+  
+  .nav-arrow-btn {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.88rem;
+  }
+  
+  .key-hint {
+    display: none;
+  }
+}

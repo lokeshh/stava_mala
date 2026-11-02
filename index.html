@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="sa">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>त्रिकस्तवसङ्ग्रहः | Trika Stava Portal</title>
+  <meta name="description"
+    content="A single page application for reading and meditating upon Kashmir Shaiva Trika Stotra texts like Stavacintamani by Bhatta Narayana, featuring Siddhanta font, complete Anvaya, Padaccheda, and translations.">
+  <link rel="icon" type="image/svg+xml" href="css/trishula.svg">
+  <link rel="stylesheet" href="css/style.css?v=3.3">
+</head>
+
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-container">
+
+      <!-- Brand Logo & Title -->
+      <a href="#" class="brand-section">
+        <div class="brand-icon" title="त्रिशूल (Trika Trishūla)">
+          <svg class="trishula-icon" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true">
+            <path d="M 50 6
+                     C 54 16 57 24 53 34
+                     C 62 33 73 28 77 15
+                     C 77 24 73 34 65 40
+                     C 59 44 54 45 53 45
+                     L 53 90
+                     A 3 3 0 0 1 47 90
+                     L 47 45
+                     C 46 45 41 44 35 40
+                     C 27 34 23 24 23 15
+                     C 27 28 38 33 47 34
+                     C 43 24 46 16 50 6
+                     Z" />
+          </svg>
+        </div>
+        <div class="brand-title">
+          <span class="brand-name sanskrit">त्रिकस्तवसङ्ग्रहः</span>
+          <span class="brand-sub">Kashmir Shaiva Stava Portal</span>
+        </div>
+      </a>
+
+      <!-- Multi-Text Selector -->
+      <div class="text-selector-wrap">
+        <select id="text-selector" class="text-selector" aria-label="Select Stava Text">
+          <option value="stava_cintamani">स्तवचिन्तामणिः (भट्टनारायण) — १२१ श्लोकाः (सटीकम्)</option>
+          <option value="laghu_stava">लघुस्तवः (धर्माचार्य) — पूर्वावलोकन</option>
+          <option value="shiva_stotravalli" disabled>शिवस्तोत्रावली (उत्पलदेव) — शीघ्रम्</option>
+          <option value="shiva_mahimna" disabled>शिवमहिम्नस्तोत्रम् — शीघ्रम्</option>
+        </select>
+        <span class="select-arrow">▼</span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="header-actions">
+        <!-- Sharada Separator (𑇈) Toggle -->
+        <button class="separator-toggle-btn" id="btn-toggle-separator" title="शारदा विभाजक (𑇈) / सामान्य रिक्ति">
+          <span style="font-family:var(--font-sanskrit);">𑇈</span> विभाजक
+        </button>
+
+        <!-- Font Zoom Controls -->
+        <button class="icon-btn" id="btn-font-minus" title="अक्षर-आकारं लघु कुरु (Decrease Font Size)"
+          aria-label="Decrease Font Size">A-</button>
+        <button class="icon-btn" id="btn-font-plus" title="अक्षर-आकारं वर्धय (Increase Font Size)"
+          aria-label="Increase Font Size">A+</button>
+
+        <!-- Theme Selector -->
+        <select id="select-theme" class="icon-btn" style="width: auto; padding: 0 0.5rem; font-size: 0.85rem;"
+          title="वर्णयोजना (Theme)" aria-label="Select Theme">
+          <option value="default">त्रिक सौम्य</option>
+          <option value="parchment">भूर्जपत्र</option>
+          <option value="forest">शारदा वन</option>
+          <option value="twilight">भैरव सन्ध्या</option>
+          <option value="saffron">काश्मीर कुङ्कुम</option>
+          <option value="dark">कैलास निशा</option>
+          <option value="light">शुभ्र ज्योति</option>
+          <option value="neela_jyoti">नील ज्योति</option>
+        </select>
+
+        <!-- Table of Contents Modal Button -->
+        <button class="icon-btn" id="btn-open-toc" title="श्लोक-सूची (Table of Contents [T])"
+          aria-label="Table of Contents">
+          ☰
+        </button>
+
+        <!-- Bookmarks Modal Button -->
+        <button class="icon-btn" id="btn-open-bookmarks" title="स्मृति-सूची (Bookmarks)" aria-label="Bookmarks">
+          ★
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="main-content">
+
+    <!-- Text Metadata Banner (Dynamic) -->
+    <div id="text-meta-container"></div>
+
+    <!-- Navigation & Reading Progress Bar -->
+    <section class="sloka-nav-bar">
+      <div class="nav-jump-group">
+        <label for="nav-jump-input" class="jump-label sanskrit">श्लोक-सङ्ख्या:</label>
+        <input type="number" id="nav-jump-input" class="jump-input sanskrit" min="1" max="121" value="1"
+          aria-label="Go to sloka number">
+        <button id="nav-jump-btn" class="jump-btn sanskrit">गच्छ (Go)</button>
+      </div>
+
+      <div class="nav-progress-wrap">
+        <div class="progress-text-row">
+          <span id="nav-progress-text" class="sanskrit">श्लोक १ / १२१ (१%)</span>
+          <span style="font-size:0.75rem;">प्रगतिः</span>
+        </div>
+        <div class="progress-track">
+          <div id="nav-progress-fill" class="progress-bar-fill" style="width: 1%;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sloka Display Area (One Sloka at a Time + ONLY Anvaya + Vivriti) -->
+    <div id="verse-display-area" style="display:flex; flex-direction:column; gap:1.25rem;">
+      <!-- Populated dynamically: Sloka (with Avataranika), Anvaya, Vivriti -->
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-quote sanskrit">
+      « सुगिरा चित्तहारिण्या पश्यन्त्या दृश्यमानया । जयत्युल्लासितानन्दमहिमा परमेश्वरः ॥१॥ »
+    </div>
+    <p>त्रिक-दर्शन-स्तव-प्रकल्पः • काश्मीर शैव दर्शन स्तव संग्रह</p>
+    <p style="margin-top:0.3rem; font-size:0.78rem; color:var(--text-muted);">
+      सिद्धान्त (Siddhanta) फॉन्ट द्वारा अलंकृत • कीबोर्ड शॉर्टकट: [←] पूर्व श्लोक, [→] अग्रिम श्लोक, [B] बुकमार्क, [T]
+      श्लोक-सूची
+    </p>
+  </footer>
+
+  <!-- Modal: Table of Contents (श्लोक-सूची) -->
+  <div class="modal-overlay" id="toc-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title sanskrit">श्लोक-सूची (Table of Contents)</h3>
+        <button class="icon-btn" onclick="appState.closeAllModals()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="toc-search-box">
+          <input type="text" id="toc-search-input" class="toc-search-input sanskrit"
+            placeholder="श्लोक खोजें... (शब्द, पद, या सङ्ख्या लिखें)">
+        </div>
+        <div class="sloka-grid" id="toc-grid-container">
+          <!-- Populated by AppState.openTocModal() -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="jump-btn" onclick="appState.closeAllModals()">पिधत्स्व (Close)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Bookmarks (स्मृति-सूची) -->
+  <div class="modal-overlay" id="bookmarks-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title sanskrit">बुकमार्क गरिएका श्लोक (Saved Verses)</h3>
+        <button class="icon-btn" onclick="appState.closeAllModals()">✕</button>
+      </div>
+      <div class="modal-body" id="bookmarks-list-container">
+        <!-- Populated by AppState.openBookmarksModal() -->
+      </div>
+      <div class="modal-footer">
+        <button class="jump-btn" onclick="appState.closeAllModals()">पिधत्स्व (Close)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification container -->
+  <div id="app-toast" class="toast-notice"></div>
+
+  <!-- Data Scripts (Loaded directly for seamless file:// and HTTP execution) -->
+  <script src="data/texts_registry.js?v=3.3"></script>
+  <script src="data/texts/stava_cintamani.js?v=3.3"></script>
+  <script src="data/texts/laghu_stava.js?v=3.3"></script>
+
+  <!-- Application Logic -->
+  <script src="js/text_manager.js?v=3.3"></script>
+  <script src="js/ui_components.js?v=3.3"></script>
+  <script src="js/app.js?v=3.3"></script>
+
+</body>
+
+</html>
