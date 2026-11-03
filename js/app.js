@@ -21,14 +21,11 @@ class AppState {
     this.init();
   }
 
-  init() {
+  async init() {
     // Apply theme
     this.applyTheme(this.theme);
     // Apply font scale
     this.applyFontScale(this.fontScale);
-
-    // Ensure textManager has current text
-    this.textManager.setText(this.currentTextId);
 
     // Check URL Hash for initial route
     this.readHashRoute();
@@ -36,12 +33,29 @@ class AppState {
     // Setup Event Listeners
     this.setupEventListeners();
 
-    // Render Initial View
-    this.render();
-
-    // Auto-sync fresh JSON if running via HTTP server
-    if (this.textManager && typeof this.textManager.checkLatestJSON === 'function') {
-      this.textManager.checkLatestJSON();
+    // Load current text data (loads .json directly)
+    const text = await this.textManager.loadText(this.currentTextId);
+    if (text) {
+      this.render();
+    } else if (this.textManager.corsError) {
+      const contentArea = document.getElementById('verse-display-area');
+      if (contentArea) {
+        contentArea.innerHTML = `
+          <div style="text-align:center; padding: 2.5rem 1rem; border: 1px solid var(--border-accent); border-radius: var(--radius-md); background: var(--bg-card); max-width: 600px; margin: 2rem auto;">
+            <h3 class="sanskrit" style="color: var(--text-accent); margin-bottom: 0.75rem;">लोकल सर्वर आवश्यकम् (Local Server Required)</h3>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+              ब्राउज़र सुरक्षा-नियमानुरोधेन <code>.json</code> सञ्चिकां पठितुं लोकल सर्वर आवश्यकः अस्ति।<br>
+              कृपया टर्मिनल-मध्ये इदं चालयित्वा पृष्ठं पुनरुद्घाटयतु:
+            </p>
+            <div style="background: var(--bg-primary); padding: 0.6rem 1rem; border-radius: 6px; font-family: monospace; display: inline-block; margin-bottom: 1rem; border: 1px solid var(--border-subtle); color: var(--text-gold);">
+              python3 -m http.server 8000
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">
+              ततः ब्राउज़र-मध्ये <a href="http://localhost:8000" style="color: var(--text-accent);">http://localhost:8000</a> उद्घाटयतु।
+            </p>
+          </div>
+        `;
+      }
     }
   }
 
@@ -143,8 +157,9 @@ class AppState {
     this.render();
   }
 
-  switchText(textId) {
-    if (this.textManager.setText(textId)) {
+  async switchText(textId) {
+    const loaded = await this.textManager.loadText(textId);
+    if (loaded) {
       this.currentTextId = textId;
       this.currentVerseOrder = parseInt(localStorage.getItem(`trika_last_verse_${this.currentTextId}`) || '1', 10);
       this.bookmarks = new Set(JSON.parse(localStorage.getItem(`trika_bookmarks_${this.currentTextId}`) || '[]'));

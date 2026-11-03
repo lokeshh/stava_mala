@@ -279,20 +279,12 @@ def build_dataset():
         "verses": verses
     }
 
-    # Write JS file
-    js_content = "/* Stavacintamani Dataset from Sanskrit Wikisource */\n"
-    js_content += "window.TRIKA_TEXTS = window.TRIKA_TEXTS || {};\n\n"
-    js_content += "window.TRIKA_TEXTS['stava_cintamani'] = " + json.dumps(dataset, ensure_ascii=False, indent=2) + ";\n"
-
-    with open('data/texts/stava_cintamani.js', 'w', encoding='utf-8') as f:
-        f.write(js_content)
-
     # Write JSON file
     with open('data/texts/stava_cintamani.json', 'w', encoding='utf-8') as f:
         json.dump(dataset, f, ensure_ascii=False, indent=2)
 
     print(f'Successfully built dataset with {len(verses)} verses!')
-    print(f'Written to data/texts/stava_cintamani.js and data/texts/stava_cintamani.json')
+    print(f'Written to data/texts/stava_cintamani.json')
 
 if __name__ == '__main__':
     build_dataset()

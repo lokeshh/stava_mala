@@ -145,8 +145,12 @@ const UI = {
     const sepSpace = useSharadaSeparator ? '𑇈' : ' ';
 
     // 2.5 Support manual pratīka markings directly in the text:
-    // <strong>word</strong>, <b>word</b>, or **word** (with optional trailing hyphen)
-    const explicitRegex = /(?:\*\*|&lt;strong(?:\s+class="[^"]*")?&gt;|&lt;b&gt;|<strong>|<b>)([\s\S]+?)(?:\*\*|&lt;\/strong&gt;|&lt;\/b&gt;|<\/strong>|<\/b>)([,;:?!]?)\s*(?:(?<![-—–])[-—–](?![-—–])\s*)?/gu;
+    // <pr>word</pr>, <strong>word</strong>, <b>word</b>, or **word** (with optional trailing hyphen)
+    const hasInlineExplicit = text.includes('<pr>') || text.includes('</pr>') ||
+                              text.includes('<strong>') || text.includes('<b>') ||
+                              text.includes('**');
+
+    const explicitRegex = /(?:\*\*|&lt;pr(?:\s+[^>]*)?&gt;|&lt;strong(?:\s+class="[^"]*")?&gt;|&lt;b&gt;|<pr>|<strong>|<b>)([\s\S]+?)(?:\*\*|&lt;\/pr&gt;|&lt;\/strong&gt;|&lt;\/b&gt;|<\/pr>|<\/strong>|<\/b>)([,;:?!]?)\s*(?:(?<![-—–])[-—–](?![-—–])\s*)?/gu;
     t = t.replace(explicitRegex, (match, word, punct) => {
       const cleanWord = word.trim();
       const after = punct ? `${punct} ` : sepSpace;
@@ -154,9 +158,8 @@ const UI = {
     });
 
     // 2.6 Support explicit "pratikas" array defined on the verse object in JSON
-    // e.g. "pratikas": ["शंभोः", "स्तवं", "चिन्तामणिं"]
-    const hasExplicitPratikas = verse && Array.isArray(verse.pratikas) && verse.pratikas.length > 0;
-    if (hasExplicitPratikas) {
+    const hasExplicitPratikas = hasInlineExplicit || (verse && Array.isArray(verse.pratikas) && verse.pratikas.length > 0);
+    if (verse && Array.isArray(verse.pratikas) && verse.pratikas.length > 0) {
       const sorted = [...verse.pratikas].filter(Boolean).map(p => p.trim()).sort((a, b) => b.length - a.length);
       for (const pratika of sorted) {
         if (!pratika) continue;
@@ -268,7 +271,7 @@ const UI = {
    */
   copyToClipboard(text, message = "प्रतिलिपि कृता (Copied to clipboard!)") {
     const clean = (text || '')
-      .replace(/<\/?(?:strong|b)(?:\s+[^>]*)?>/gi, '')
+      .replace(/<\/?(?:pr|strong|b)(?:\s+[^>]*)?>/gi, '')
       .replace(/\*\*/g, '')
       .replace(/\u00AD/gu, '');
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -284,7 +287,7 @@ const UI = {
 
   fallbackCopy(text, message) {
     const clean = (text || '')
-      .replace(/<\/?(?:strong|b)(?:\s+[^>]*)?>/gi, '')
+      .replace(/<\/?(?:pr|strong|b)(?:\s+[^>]*)?>/gi, '')
       .replace(/\*\*/g, '')
       .replace(/\u00AD/gu, '');
     const ta = document.createElement("textarea");

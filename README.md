@@ -58,8 +58,7 @@ trika_stava/
 ├── data/
 │   ├── texts_registry.js        # समस्त ग्रन्थों की पंजिका (Registry)
 │   └── texts/
-│       ├── stava_cintamani.js   # स्तवचिन्तामणि सम्पूर्ण १२१ श्लोक (JS)
-│       ├── stava_cintamani.json # स्तवचिन्तामणि सम्पूर्ण डेटा (JSON)
+│       ├── stava_cintamani.json # स्तवचिन्तामणि सम्पूर्ण १२१ श्लोक (एकमात्र JSON डेटा)
 │       └── laghu_stava.js       # लघुस्तव पूर्वावलोकन
 ├── scripts/
 │   ├── build_dataset.py         # stava_cinta.txt से डेटा निर्माण स्क्रिप्ट
@@ -75,16 +74,8 @@ trika_stava/
 
 ## उपयोग विधि (How to Run)
 
-यह ऍप्लिकेशन बिना किसी बाह्य निर्भरता (Zero Dependencies) के पूर्णतः स्वयंपूर्ण है:
-
-1. **ब्राउज़र में सीधे खोलें**:
-   `index.html` फ़ाइल पर डबल-क्लिक करें अथवा किसी भी वेब ब्राउज़र (Chrome, Safari, Firefox, Edge) में खोलें:
-   ```bash
-   open index.html
-   ```
-
-2. **स्थानीय सर्वर द्वारा (वैकल्पिक)**:
-   ```bash
-   python3 -m http.server 8000
-   ```
-   और ब्राउज़र में `http://localhost:8000` खोलें।
+स्थानीय सर्वर द्वारा (Local HTTP Server):
+```bash
+python3 -m http.server 8000
+```
+और ब्राउज़र में `http://localhost:8000` खोलें। `data/texts/stava_cintamani.json` में किया गया कोई भी संशोधन तुरंत ब्राउज़र रिफ्रेश करने पर दिखाई देगा।

@@ -10,7 +10,7 @@ window.TRIKA_REGISTRY = {
       "verses_count": 121,
       "status": "ready",
       "badge": "पूर्ण (१२१ श्लोकाः सटीकाः)",
-      "dataFile": "data/texts/stava_cintamani.js",
+      "dataFile": "data/texts/stava_cintamani.json",
       "description": "परावाक्, स्वातन्त्र्य और विमर्शात्मक शिवभक्ति का १०वीं शताब्दी का अनुपम महास्तोत्र, आचार्य क्षेमराज कृत विवृत्ति टीका सहित।"
     },
     {

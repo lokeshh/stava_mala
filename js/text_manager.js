@@ -9,6 +9,7 @@ class TextManager {
     this.loadedTexts = window.TRIKA_TEXTS || {};
     this.currentTextId = 'stava_cintamani';
     this.currentText = this.loadedTexts[this.currentTextId] || null;
+    this.corsError = false;
   }
 
   getTextList() {
@@ -22,23 +23,30 @@ class TextManager {
     return this.currentText;
   }
 
-  async checkLatestJSON() {
-    if (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
-      try {
-        const resp = await fetch('data/texts/stava_cintamani.json?t=' + Date.now());
-        if (resp.ok) {
-          const freshData = await resp.json();
-          window.TRIKA_TEXTS['stava_cintamani'] = freshData;
-          if (this.currentTextId === 'stava_cintamani') {
-            this.currentText = freshData;
-            if (window.appState && typeof window.appState.renderCurrentVerse === 'function') {
-              window.appState.renderCurrentVerse();
-            }
-          }
-        }
-      } catch (err) {
-        // Fallback silently to preloaded JS
+  async loadText(textId) {
+    if (this.loadedTexts[textId]) {
+      this.currentTextId = textId;
+      this.currentText = this.loadedTexts[textId];
+      return this.currentText;
+    }
+
+    const entry = this.registry.texts.find(t => t.id === textId);
+    const dataFile = entry ? (entry.dataFile || `data/texts/${textId}.json`) : `data/texts/${textId}.json`;
+
+    try {
+      const resp = await fetch(dataFile + '?t=' + Date.now());
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      this.loadedTexts[textId] = data;
+      this.currentTextId = textId;
+      this.currentText = data;
+      return data;
+    } catch (err) {
+      console.warn(`Could not load ${dataFile}:`, err.message);
+      if (typeof window !== 'undefined' && window.location && window.location.protocol === 'file:') {
+        this.corsError = true;
       }
+      return null;
     }
   }
 
@@ -48,7 +56,6 @@ class TextManager {
       this.currentText = this.loadedTexts[textId];
       return true;
     }
-    console.warn(`Text "${textId}" not yet loaded in window.TRIKA_TEXTS`);
     return false;
   }
 
@@ -68,7 +75,7 @@ class TextManager {
     if (!text || !text.verses) return [];
     if (!query || query.trim() === '') return text.verses;
 
-    const norm = (s) => (s || '').replace(/\u00AD/gu, '').replace(/,/gu, ' ').replace(/\s+/gu, ' ').toLowerCase();
+    const norm = (s) => (s || '').replace(/<\/?(?:pr|strong|b)(?:\s+[^>]*)?>/gi, '').replace(/\u00AD/gu, '').replace(/,/gu, ' ').replace(/\s+/gu, ' ').toLowerCase();
     const q = norm(query.trim());
 
     return text.verses.filter(v => {
