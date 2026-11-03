@@ -38,6 +38,11 @@ class AppState {
 
     // Render Initial View
     this.render();
+
+    // Auto-sync fresh JSON if running via HTTP server
+    if (this.textManager && typeof this.textManager.checkLatestJSON === 'function') {
+      this.textManager.checkLatestJSON();
+    }
   }
 
   savePreferences() {
@@ -208,8 +213,12 @@ class AppState {
         : this.collapsedSections['avataranika']
     );
 
+    const isVishayarthaCollapsed = this.collapsedSections['vishayartha'] !== undefined 
+      ? Boolean(this.collapsedSections['vishayartha']) 
+      : true;
+
     contentArea.innerHTML = `
-      ${UI.renderSlokaCard(verse, isBookmarked, this.useSharadaSeparator, isCommentaryCollapsed)}
+      ${UI.renderSlokaCard(verse, isBookmarked, this.useSharadaSeparator, isCommentaryCollapsed, isVishayarthaCollapsed)}
       ${UI.renderAnvayaCard(verse, this.collapsedSections['anvaya'])}
       ${UI.renderVivritiCard(verse, isCommentaryCollapsed, this.useSharadaSeparator)}
     `;

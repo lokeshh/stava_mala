@@ -218,6 +218,10 @@ body {
   flex-direction: column;
   transition: background-color 0.25s ease, color 0.25s ease;
   overflow-x: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: manual;
+  -webkit-hyphens: manual;
 }
 
 /* Typography */
@@ -231,6 +235,10 @@ h1, h2, h3, h4, h5 {
   font-family: var(--font-sanskrit);
   letter-spacing: 0.02em;
   font-feature-settings: "kern" 1, "liga" 1, "clig" 1, "dlig" 1;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: manual;
+  -webkit-hyphens: manual;
 }
 
 /* Header */
@@ -247,50 +255,47 @@ h1, h2, h3, h4, h5 {
 .header-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0.75rem 1.25rem;
+  padding: 0.5rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.85rem;
 }
 
 .brand-section {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   text-decoration: none;
   color: inherit;
+  flex-shrink: 0;
 }
 
 .brand-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-md);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
   background: var(--bg-accent);
-  border: 1.5px solid var(--border-gold);
+  border: 1px solid var(--border-gold);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-accent);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
+  transition: all 0.25s ease;
 }
 
 .brand-icon:hover {
-  transform: scale(1.08) rotate(3deg);
+  transform: scale(1.05);
   border-color: var(--border-accent);
   color: var(--text-gold);
-  background: var(--bg-card);
-  box-shadow: var(--shadow-glow);
 }
 
 .brand-icon .trishula-icon {
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   fill: currentColor;
-  transition: fill 0.3s ease, transform 0.3s ease;
+  transition: fill 0.3s ease;
   display: block;
 }
 
@@ -305,16 +310,17 @@ h1, h2, h3, h4, h5 {
 }
 
 .brand-name {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
 }
 
 .brand-sub {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -323,6 +329,7 @@ h1, h2, h3, h4, h5 {
   display: flex;
   align-items: center;
   position: relative;
+  flex-shrink: 1;
 }
 
 .text-selector {
@@ -330,49 +337,48 @@ h1, h2, h3, h4, h5 {
   background: var(--bg-card);
   color: var(--text-primary);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 0.5rem 2.2rem 0.5rem 0.9rem;
-  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 1.8rem 0.4rem 0.75rem;
+  font-size: 0.9rem;
   font-family: var(--font-sanskrit);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: var(--shadow-sm);
 }
 
 .text-selector:hover, .text-selector:focus {
   border-color: var(--border-accent);
   outline: none;
-  box-shadow: var(--shadow-glow);
 }
 
 .select-arrow {
   position: absolute;
-  right: 0.8rem;
+  right: 0.6rem;
   pointer-events: none;
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.65rem;
 }
 
 /* Header Actions */
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
+  flex-shrink: 0;
 }
 
 .icon-btn {
   background: var(--bg-card);
   color: var(--text-secondary);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  width: 38px;
-  height: 38px;
+  border-radius: var(--radius-sm);
+  width: 34px;
+  height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.85rem;
   transition: all 0.2s ease;
 }
 
@@ -380,13 +386,19 @@ h1, h2, h3, h4, h5 {
   background: var(--bg-card-hover);
   color: var(--text-primary);
   border-color: var(--border-accent);
-  transform: translateY(-1px);
 }
 
 .icon-btn.active {
   background: var(--border-accent);
   color: #fff;
   border-color: var(--border-accent);
+}
+
+.theme-select-btn {
+  width: auto !important;
+  padding: 0 0.5rem !important;
+  font-size: 0.8rem !important;
+  height: 34px;
 }
 
 /* Main Container */
@@ -398,146 +410,40 @@ h1, h2, h3, h4, h5 {
   padding: 1.5rem 1rem 3rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
-/* Info Bar */
-.text-meta-banner {
-  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
-  border: 1px solid var(--border-subtle);
-  border-left: 4px solid var(--border-accent);
-  border-radius: var(--radius-md);
-  padding: 0.9rem 1.25rem;
+/* Minimalist Text Header */
+.text-meta-minimal {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: 0.75rem;
+  padding: 0.35rem 0.25rem 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 0.25rem;
 }
 
-.meta-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.text-title-large {
-  font-size: 1.35rem;
+.text-title-minimal {
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-gold);
+  margin: 0;
+  letter-spacing: 0.02em;
 }
 
-.text-author-sub {
+.text-meta-details {
   font-size: 0.85rem;
   color: var(--text-muted);
-}
-
-.meta-badges {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
+  flex-wrap: wrap;
 }
 
-.badge {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.6rem;
-  border-radius: var(--radius-full);
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.badge-saffron {
-  background: rgba(217, 83, 47, 0.15);
-  border-color: var(--border-accent);
-  color: var(--text-accent);
-}
-
-/* Progress & Sloka Navigation Bar */
-.sloka-nav-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 0.75rem 1.25rem;
-  box-shadow: var(--shadow-sm);
-}
-
-.nav-jump-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.jump-label {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
-.jump-input {
-  width: 60px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 0.35rem 0.5rem;
-  text-align: center;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.jump-input:focus {
-  outline: none;
-  border-color: var(--border-accent);
-}
-
-.jump-btn {
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 0.35rem 0.75rem;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-.jump-btn:hover {
-  color: var(--text-primary);
-  border-color: var(--border-accent);
-}
-
-.nav-progress-wrap {
-  flex: 1;
-  max-width: 280px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.progress-text-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-
-.progress-track {
-  height: 6px;
-  background: var(--bg-secondary);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-  position: relative;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--color-saffron), var(--color-gold));
-  border-radius: var(--radius-full);
-  transition: width 0.3s ease;
+.meta-sep {
+  opacity: 0.45;
+  font-size: 0.7rem;
 }
 
 /* Main Sloka Card */
@@ -617,6 +523,10 @@ h1, h2, h3, h4, h5 {
   margin-bottom: 0.4rem;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   text-align: left;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: manual;
+  -webkit-hyphens: manual;
 }
 
 .sloka-meter-tag {
@@ -759,6 +669,10 @@ h1, h2, h3, h4, h5 {
   line-height: 1.85;
   color: var(--text-primary);
   margin-bottom: 1rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: manual;
+  -webkit-hyphens: manual;
 }
 
 .vivriti-para:last-child {
@@ -781,15 +695,51 @@ h1, h2, h3, h4, h5 {
   border: 1px solid var(--border-subtle);
   border-left: 4px solid var(--border-accent);
   border-radius: var(--radius-md);
-  padding: 0.85rem 1.15rem;
-  margin-bottom: 1.25rem;
+  padding: 0.65rem 1.15rem;
+  margin-bottom: 1rem;
   text-align: left;
+  transition: all 0.2s ease;
 }
 
 .vishayartha-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.vishayartha-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vishayartha-header .card-toggle-icon {
+  font-size: 0.85rem;
+  color: var(--text-accent);
+  transition: transform 0.2s ease;
+}
+
+.vishayartha-header:hover .vishayartha-tag {
+  border-color: var(--border-gold);
+}
+
+.vishayartha-wrap.collapsed {
+  padding: 0.45rem 1.15rem;
+  margin-bottom: 0.75rem;
+}
+
+.vishayartha-wrap.collapsed .vishayartha-text {
+  display: none;
+}
+
+.vishayartha-wrap.collapsed .card-toggle-icon {
+  transform: rotate(-90deg);
+}
+
+.vishayartha-wrap:not(.collapsed) .vishayartha-header {
   margin-bottom: 0.4rem;
 }
 
@@ -810,6 +760,10 @@ h1, h2, h3, h4, h5 {
   line-height: 1.8;
   color: var(--text-primary);
   font-weight: 500;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: manual;
+  -webkit-hyphens: manual;
 }
 
 /* Avataraṇikā (Introductory Context by Kṣemarāja - clean without special background) */
@@ -878,6 +832,10 @@ h1, h2, h3, h4, h5 {
   font-size: var(--avataranika-font-size);
   line-height: 1.75;
   color: var(--text-secondary);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: manual;
+  -webkit-hyphens: manual;
 }
 
 /* Separator Toggle Button */
@@ -968,6 +926,10 @@ h1, h2, h3, h4, h5 {
   font-size: var(--anvaya-font-size);
   line-height: 1.85;
   color: var(--text-primary);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: manual;
+  -webkit-hyphens: manual;
 }
 
 .anvaya-highlight {
@@ -1310,24 +1272,91 @@ h1, h2, h3, h4, h5 {
   }
   
   .header-container {
-    padding: 0.6rem 1rem;
+    padding: 0.45rem 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem 0.5rem;
   }
   
+  .brand-section {
+    gap: 0.45rem;
+  }
+
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-icon .trishula-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .brand-name {
+    font-size: 1.05rem;
+  }
+
   .brand-sub {
     display: none;
   }
+
+  .text-selector-wrap {
+    max-width: 150px;
+  }
+
+  .text-selector {
+    padding: 0.35rem 1.4rem 0.35rem 0.55rem;
+    font-size: 0.85rem;
+  }
+
+  .header-actions {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem;
+    padding-top: 0.35rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .separator-toggle-btn {
+    height: 32px;
+    padding: 0 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.82rem;
+  }
+
+  .theme-select-btn {
+    height: 32px;
+    max-width: 95px;
+    font-size: 0.75rem !important;
+    padding: 0 0.35rem !important;
+  }
+
+  .text-meta-minimal {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .text-title-minimal {
+    font-size: 1.15rem;
+  }
+
+  .text-meta-details {
+    font-size: 0.78rem;
+  }
   
   .sloka-display-card {
-    padding: 1.8rem 1.2rem;
-  }
-  
-  .sloka-nav-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .nav-progress-wrap {
-    max-width: 100%;
+    padding: 1.6rem 1rem;
   }
   
   .sloka-nav-arrows {
@@ -1335,11 +1364,40 @@ h1, h2, h3, h4, h5 {
   }
   
   .nav-arrow-btn {
-    padding: 0.75rem 0.5rem;
+    padding: 0.7rem 0.5rem;
     font-size: 0.88rem;
   }
   
   .key-hint {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0.4rem 0.6rem;
+  }
+
+  .btn-label-text {
+    display: none;
+  }
+
+  .separator-toggle-btn {
+    width: 32px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .theme-select-btn {
+    max-width: 82px;
+    font-size: 0.72rem !important;
+  }
+
+  .text-selector-wrap {
+    max-width: 135px;
+  }
+
+  .brand-name {
+    font-size: 0.98rem;
   }
 }

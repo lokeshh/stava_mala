@@ -22,6 +22,26 @@ class TextManager {
     return this.currentText;
   }
 
+  async checkLatestJSON() {
+    if (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
+      try {
+        const resp = await fetch('data/texts/stava_cintamani.json?t=' + Date.now());
+        if (resp.ok) {
+          const freshData = await resp.json();
+          window.TRIKA_TEXTS['stava_cintamani'] = freshData;
+          if (this.currentTextId === 'stava_cintamani') {
+            this.currentText = freshData;
+            if (window.appState && typeof window.appState.renderCurrentVerse === 'function') {
+              window.appState.renderCurrentVerse();
+            }
+          }
+        }
+      } catch (err) {
+        // Fallback silently to preloaded JS
+      }
+    }
+  }
+
   setText(textId) {
     if (this.loadedTexts[textId]) {
       this.currentTextId = textId;
@@ -48,7 +68,7 @@ class TextManager {
     if (!text || !text.verses) return [];
     if (!query || query.trim() === '') return text.verses;
 
-    const norm = (s) => (s || '').replace(/,/gu, ' ').replace(/\s+/gu, ' ').toLowerCase();
+    const norm = (s) => (s || '').replace(/\u00AD/gu, '').replace(/,/gu, ' ').replace(/\s+/gu, ' ').toLowerCase();
     const q = norm(query.trim());
 
     return text.verses.filter(v => {
