@@ -357,34 +357,11 @@ class AppState {
       }
     });
 
-    // Mobile Swipe Gestures
-    let touchStartX = 0;
-    let touchEndX = 0;
-    document.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, false);
-    document.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      this.handleSwipe(touchStartX, touchEndX);
-    }, false);
-
     // Hash change event (Back/Forward browser buttons)
     window.addEventListener('hashchange', () => {
       this.readHashRoute();
       this.render();
     });
-  }
-
-  handleSwipe(startX, endX) {
-    const threshold = 60;
-    const diff = endX - startX;
-    if (Math.abs(diff) > threshold) {
-      if (diff > 0) {
-        this.prevVerse();
-      } else {
-        this.nextVerse();
-      }
-    }
   }
 
   openTocModal(filterQuery = '') {
