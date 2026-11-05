@@ -689,6 +689,31 @@ h1, h2, h3, h4, h5 {
   letter-spacing: 0.02em;
 }
 
+/* Quoted Scriptures & Verses in Commentary (<q>...</q>) */
+.commentary-quote {
+  display: block;
+  background: var(--bg-accent);
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1.25rem;
+  margin: 0.75rem 0;
+  line-height: 1.9;
+  color: var(--text-primary);
+  font-size: 1.05em;
+  quotes: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.commentary-quote::before,
+.commentary-quote::after {
+  content: none !important;
+}
+
+.vivriti-para > .commentary-quote:first-child:last-child {
+  margin: 0.25rem 0;
+}
+
 /* मूलश्लोकानां संक्षेपेण विषयार्थसंग्रहः (Thematic Purport with Special Accent Background) */
 .vishayartha-wrap {
   background: var(--bg-accent);

@@ -75,7 +75,7 @@ class TextManager {
     if (!text || !text.verses) return [];
     if (!query || query.trim() === '') return text.verses;
 
-    const norm = (s) => (s || '').replace(/<\/?(?:pr|strong|b)(?:\s+[^>]*)?>/gi, '').replace(/\u00AD/gu, '').replace(/,/gu, ' ').replace(/\s+/gu, ' ').toLowerCase();
+    const norm = (s) => (s || '').replace(/<\/?(?:pr|strong|b|q|span)(?:\s+[^>]*)?>/gi, '').replace(/\u00AD/gu, '').replace(/,/gu, ' ').replace(/\s+/gu, ' ').toLowerCase();
     const q = norm(query.trim());
 
     return text.verses.filter(v => {

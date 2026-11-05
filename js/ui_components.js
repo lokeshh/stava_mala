@@ -144,27 +144,22 @@ const UI = {
 
     const sepSpace = useSharadaSeparator ? '𑇈' : ' ';
 
-    // 2.5 Support manual pratīka markings directly in the text:
+    // 2.5 Support explicit pratīka markings directly in the text:
     // <pr>word</pr>, <strong>word</strong>, <b>word</b>, or **word** (with optional trailing hyphen)
-    const hasInlineExplicit = text.includes('<pr>') || text.includes('</pr>') ||
-                              text.includes('<strong>') || text.includes('<b>') ||
-                              text.includes('**');
-
-    const explicitRegex = /(?:\*\*|&lt;pr(?:\s+[^>]*)?&gt;|&lt;strong(?:\s+class="[^"]*")?&gt;|&lt;b&gt;|<pr>|<strong>|<b>)([\s\S]+?)(?:\*\*|&lt;\/pr&gt;|&lt;\/strong&gt;|&lt;\/b&gt;|<\/pr>|<\/strong>|<\/b>)([,;:?!]?)\s*(?:(?<![-—–])[-—–](?![-—–])\s*)?/gu;
+    const explicitRegex = /(?:\*\*|&lt;pr(?:\s+[^>]*)?&gt;|&lt;strong(?:\s+class="[^"]*")?&gt;|&lt;b&gt;|<pr>|<strong>|<b>)([\s\S]+?)(?:\*\*|&lt;\/pr&gt;|&lt;\/strong&gt;|&lt;\/b&gt;|<\/pr>|<\/strong>|<\/b>)([,;:?!]?)[ \t\r\f\v𑇈]*(?:(?<![-—–])[-—–](?![-—–])[ \t\r\f\v𑇈]*)?/gu;
     t = t.replace(explicitRegex, (match, word, punct) => {
       const cleanWord = word.trim();
       const after = punct ? `${punct} ` : sepSpace;
       return `<strong class="pratika-bold">${cleanWord}</strong>${after}`;
     });
 
-    // 2.6 Support explicit "pratikas" array defined on the verse object in JSON
-    const hasExplicitPratikas = hasInlineExplicit || (verse && Array.isArray(verse.pratikas) && verse.pratikas.length > 0);
+    // 2.6 Support explicit "pratikas" array defined on the verse object in JSON (if present)
     if (verse && Array.isArray(verse.pratikas) && verse.pratikas.length > 0) {
       const sorted = [...verse.pratikas].filter(Boolean).map(p => p.trim()).sort((a, b) => b.length - a.length);
       for (const pratika of sorted) {
         if (!pratika) continue;
         const escaped = pratika.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const pRegex = new RegExp(`(?<![<\\/\\w])(${escaped})([,;:?!]?)\\s*(?:(?<![-—–])[-—–](?![-—–])\\s*)?`, 'gu');
+        const pRegex = new RegExp(`(?<![<\\/\\w])(${escaped})([,;:?!]?)[ \\t\\r\\f\\v𑇈]*(?:(?<![-—–])[-—–](?![-—–])[ \\t\\r\\f\\v𑇈]*)?`, 'gu');
         t = t.replace(pRegex, (m, word, punct) => {
           const after = punct ? `${punct} ` : sepSpace;
           return `<strong class="pratika-bold">${word}</strong>${after}`;
@@ -172,93 +167,15 @@ const UI = {
       }
     }
 
-    // Helper: Stopwords that should never be treated as pratīkas
-    const stopWords = new Set([
-      'च', 'अपि', 'एव', 'न', 'तु', 'हि', 'वा', 'इति', 'यथा', 'तथा', 'यत्', 'तत्', 
-      'कः', 'इदम्', 'अयम्', 'अहम्', 'वयम्', 'वयं', 'अत्र', 'तत्र', 'यत्र', 'सर्व', 'इह', 
-      'एतत्', 'अथ', 'आह', 'हे', 'इत्यर्थः', 'कीदृक्', 'कीदृशम्', 'यतः', 'ततः', 'भवति',
-      'पदार्थस्तु', 'वाक्यार्थस्तु', 'इत्याह', 'तथाहि', 'वर्तते', 'किञ्च', 'किंच'
-    ]);
-
-    const cleanSanskrit = (s) => (s || '')
-      .replace(/[।॥०-९0-9,;:?!()\\/\"—–\s]/g, '')
-      .replace(/ं/g, 'म्')
-      .replace(/ः/g, '');
-
-    const normalizeWord = (w) => (w || '')
-      .replace(/[।॥०-९0-9,;:?!()\\/\"—–]/g, '')
-      .replace(/ं/g, 'म्')
-      .replace(/ः/g, '')
-      .replace(/ो$/, '')
-      .replace(/म्$/, '')
-      .replace(/च्छ/g, 'छ')
-      .replace(/च्च/g, 'त्च')
-      .replace(/ङ्/g, 'क्')
-      .replace(/ञ्/g, 'च्')
-      .replace(/द्/g, 'त्')
-      .replace(/ऽ/g, '')
-      .trim();
-
-    const getMoolTokens = (v) => {
-      if (!v) return [];
-      const raw = ((v.sloka || '') + ' ' + (v.anvaya || '')).replace(/[।॥०-९0-9,;:?!()\\/\"—–]/g, ' ');
-      return raw.split(/[\s\-]+/).map(w => w.trim()).filter(Boolean);
-    };
-
-    const isFromMoolSloka = (word, v) => {
-      if (!word || stopWords.has(word)) return false;
-      if (!v) return true; // if no verse context, accept pratika
-      
-      const rawTokens = getMoolTokens(v);
-      if (rawTokens.includes(word) || rawTokens.includes(word + 'ः') || rawTokens.includes(word + 'म्')) return true;
-      
-      const slokaClean = cleanSanskrit((v.sloka || '') + ' ' + (v.anvaya || ''));
-      const wordClean = cleanSanskrit(word);
-      if (wordClean.length < 2) return false;
-      
-      if (slokaClean.includes(wordClean)) return true;
-      
-      const normWord = normalizeWord(word);
-      const normSloka = normalizeWord((v.sloka || '') + ' ' + (v.anvaya || ''));
-      if (normSloka.includes(normWord)) return true;
-      
-      // Stem match
-      const stem = normWord.replace(/(या|ेन|स्य|ाय|ात्|ैः|ौ|े|ि|ो|त्|म्|ः)$/, '');
-      if (stem.length >= 2 && normSloka.includes(stem)) return true;
-      
-      // Guna / prefix reverse
-      if (normSloka.includes(normWord.replace(/^उ/, 'ओ'))) return true;
-      if (normSloka.includes(normWord.replace(/^इ/, 'ए'))) return true;
-      if (normSloka.includes('निर' + normWord) || normSloka.includes('निर्' + normWord)) return true;
-      
-      return false;
-    };
-
-    // 3. Highlight pratīka word directly preceding a single hyphen/dash, removing the hyphen after the pratīka
-    const pratikaRegex = /(?:^|(?<=[\s\n(𑇈]))(?!\d+|[०-९]+)([\u0900-\u097F\u1CD0-\u1CFF\uA8E0-\uA8FF]+)([,;:?!]?)\s*(?<![-—–])[-—–](?![-—–])\s*/gu;
-
-    t = t.replace(pratikaRegex, (match, word, punct) => {
-      // If this verse explicitly defines its pratikas list in JSON, skip heuristic guessing
-      if (hasExplicitPratikas) {
-        return match;
-      }
-      if (isFromMoolSloka(word, verse)) {
-        // Pratīka directly from mool sloka: make strong AND remove the hyphen '-' after it
-        const after = punct ? `${punct} ` : sepSpace;
-        return `<strong class="pratika-bold">${word}</strong>${after}`;
-      }
-      // If NOT from mool sloka, keep normal hyphenated text intact: word punct - 
-      return match;
+    // 2.7 Support <q>...</q> quotation tags for quoted verses/passages
+    const quoteRegex = /(?:&lt;|<)q(?:\s+[^>]*)?(?:&gt;|>)([\s\S]*?)(?:&lt;|<)\/q\s*(?:&gt;|>)/gi;
+    t = t.replace(quoteRegex, (match, inner) => {
+      return `<span class="commentary-quote">${inner.trim()}</span>`;
     });
 
-    // 4. Also check direct vocative quotes from the verse like 'हे [MoolWord] !'
-    const vocativeRegex = /(हे\s+)([\u0900-\u097F\u1CD0-\u1CFF\uA8E0-\uA8FF]+)(\s*!)/gu;
-    t = t.replace(vocativeRegex, (m, pre, word, post) => {
-      if (isFromMoolSloka(word, verse)) {
-        return `${pre}<strong class="pratika-bold">${word}</strong>${post}`;
-      }
-      return m;
-    });
+    // 3. Convert newlines to <br> and restore any escaped <br> tags
+    t = t.replace(/\n/g, '<br>');
+    t = t.replace(/&lt;br\s*\/?&gt;/gi, '<br>');
 
     t = t.replace(/[ \t]+$/gmu, '');
     t = t.replace(/ {2,}/g, ' ');
@@ -267,11 +184,44 @@ const UI = {
   },
 
   /**
+   * Format Anvaya (prose word order) text cleanly with standard Devanagari spacing and soft hyphens.
+   * Pure prose order without any pratīka highlighting.
+   */
+  formatAnvayaHTML(text) {
+    if (!text) return '';
+    // 1. Format clean Devanagari spacing (standard spaces, never Sharada separator)
+    let t = UI.formatDevanagari(text, false);
+
+    // 2. Escape HTML entities
+    t = UI.escapeHTML(t);
+
+    // 3. Strip any manual pratika or bold markup if present
+    t = t.replace(/<\/?(?:pr|strong|b)(?:\s+[^>]*)?>/gi, '').replace(/\*\*/g, '');
+
+    // 3.5 Support <q>...</q> quotation tags if present
+    const quoteRegex = /(?:&lt;|<)q(?:\s+[^>]*)?(?:&gt;|>)([\s\S]*?)(?:&lt;|<)\/q\s*(?:&gt;|>)/gi;
+    t = t.replace(quoteRegex, (match, inner) => {
+      return `<span class="commentary-quote">${inner.trim()}</span>`;
+    });
+
+    // 4. Convert newlines to <br> and restore any escaped <br> tags
+    t = t.replace(/\n/g, '<br>');
+    t = t.replace(/&lt;br\s*\/?&gt;/gi, '<br>');
+
+    t = t.replace(/[ \t]+$/gmu, '');
+    t = t.replace(/ {2,}/g, ' ');
+
+    // 5. Syllable-aware soft hyphenation for clean line breaks
+    return UI.addSoftHyphens(t.trim());
+  },
+
+  /**
    * Copy text to clipboard with notification
    */
   copyToClipboard(text, message = "प्रतिलिपि कृता (Copied to clipboard!)") {
     const clean = (text || '')
-      .replace(/<\/?(?:pr|strong|b)(?:\s+[^>]*)?>/gi, '')
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/?(?:pr|strong|b|q|span)(?:\s+[^>]*)?>/gi, '')
       .replace(/\*\*/g, '')
       .replace(/\u00AD/gu, '');
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -287,7 +237,8 @@ const UI = {
 
   fallbackCopy(text, message) {
     const clean = (text || '')
-      .replace(/<\/?(?:pr|strong|b)(?:\s+[^>]*)?>/gi, '')
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/?(?:pr|strong|b|q|span)(?:\s+[^>]*)?>/gi, '')
       .replace(/\*\*/g, '')
       .replace(/\u00AD/gu, '');
     const ta = document.createElement("textarea");
