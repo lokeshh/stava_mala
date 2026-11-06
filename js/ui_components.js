@@ -9,36 +9,41 @@ const UI = {
    */
   formatDevanagari(text, useSharadaSeparator = false) {
     if (!text) return '';
-    // Replace commas with just a space as requested (e.g. "स्वभित्ताववभासयन्, अवरोहक्रमेण" -> "स्वभित्ताववभासयन् अवरोहक्रमेण")
-    let cleanText = text.replace(/,/gu, ' ');
 
     if (useSharadaSeparator) {
-      // 1. Replace all whitespace runs with Sharada separator (𑇈)
-      let t = cleanText.replace(/[ \t\r\f\v]+/gu, '𑇈');
+      // 1. Where there is a comma, it represents a clause pause: replace with standard space (protected from becoming 𑇈)
+      let t = text.replace(/[ \t]*,[ \t]*(?=\n|$)/gmu, '');
+      t = t.replace(/[ \t]*,[ \t]*/gu, '\uE000');
 
-      // 2. Strictly remove 𑇈 around hyphens and dashes (—, –, -)
+      // 2. Replace all whitespace runs with Sharada separator (𑇈)
+      t = t.replace(/[ \t\r\f\v]+/gu, '𑇈');
+
+      // 3. Restore comma breaks as just standard space (never 𑇈)
+      t = t.replace(/\uE000/gu, ' ');
+
+      // 4. Strictly remove 𑇈 around hyphens and dashes (—, –, -)
       t = t.replace(/[ \t\r\f\v𑇈]+([—–\-])/gu, '$1');
       t = t.replace(/([—–\-])[ \t\r\f\v𑇈]+/gu, '$1');
 
-      // 3. Punctuation spacing (remove 𑇈 before, ensure standard space after)
+      // 5. Punctuation spacing (remove 𑇈 before, ensure standard space after)
       t = t.replace(/[ 𑇈]+([;:?!])/gu, '$1');
       t = t.replace(/([;:?!])[ 𑇈]*/gu, '$1 ');
 
       // Remove space before dandas (॥ and ।)
       t = t.replace(/[ \t\r\f\v𑇈\u00A0]+(॥|।।|[।])/gu, '$1');
 
-      // 4. Clean verse numbers inside double dandas: remove spaces and 𑇈 inside
+      // 6. Clean verse numbers inside double dandas: remove spaces and 𑇈 inside
       // e.g. ॥ ५३ ॥ -> ॥५३॥, ॥ ४७ (१) ॥ -> ॥४७(१)॥
       t = t.replace(/(॥|।।)[ 𑇈\u00A0]*([०-९\d\s𑇈()]+?)[ 𑇈\u00A0]*(॥|।।)/gu, (match, d1, inner, d2) => {
         const cleanInner = inner.replace(/[ 𑇈\u00A0]+/gu, '');
         return `${d1}${cleanInner}${d2}`;
       });
 
-      // 6. Skip replacing space after । and ॥ (ensure standard space after, never 𑇈)
+      // 7. Skip replacing space after । and ॥ (ensure standard space after, never 𑇈)
       t = t.replace(/([।])[ 𑇈\u00A0]+/gu, '$1 ');
       t = t.replace(/(॥|।।)[ 𑇈\u00A0]+/gu, '$1 ');
 
-      // 7. Clean line ends & beginnings (remove trailing/leading 𑇈 or spaces per line)
+      // 8. Clean line ends & beginnings (remove trailing/leading 𑇈 or spaces per line)
       t = t.replace(/[ 𑇈]+$/gmu, '');
       t = t.replace(/^[ 𑇈]+/gmu, '');
 
@@ -47,8 +52,10 @@ const UI = {
 
       return t.trim();
     } else {
-      // Normal clean Sanskrit spacing
-      let t = cleanText.replace(/𑇈/gu, ' ');
+      // Normal clean Sanskrit spacing: commas become a clean single space
+      let t = text.replace(/𑇈/gu, ' ');
+      t = t.replace(/[ \t]*,[ \t]*(?=\n|$)/gmu, '');
+      t = t.replace(/[ \t]*,[ \t]*/gu, ' ');
       t = t.replace(/[ \t]+/gu, ' ');
       t = t.replace(/[ \t]+([—–-])(\n|$)/gmu, '$1$2');
       t = t.replace(/[ \t]+([;:?!])/gu, '$1');
