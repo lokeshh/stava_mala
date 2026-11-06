@@ -5,7 +5,7 @@ window.TRIKA_REGISTRY = {
       "id": "stava_cintamani",
       "title": "स्तवचिन्तामणिः",
       "transliteration": "Stavacintāmaṇiḥ",
-      "author": "भट्टनारायण",
+      "author": "श्रीभट्टनारायण",
       "author_en": "Bhaṭṭa Nārāyaṇa",
       "verses_count": 121,
       "status": "ready",

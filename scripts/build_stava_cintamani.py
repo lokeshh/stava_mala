@@ -20,6 +20,11 @@ def clean_commentary_text(text):
         return ''
     # Strip page annotations like (पगे १५३)
     text = re.sub(r'\(पगे\s+[०-९a-zA-Z\s]+\)', '', text)
+    # Remove space before dandas
+    text = re.sub(r'[ \t\u00A0]+(॥|।।|[।])', r'\1', text)
+    # Replace commas with single space
+    text = re.sub(r'[ \t]*,[ \t]*(?=\n|$)', '', text)
+    text = re.sub(r'[ \t]*,[ \t]*', ' ', text)
     # Normalize multiple whitespace characters within lines but preserve paragraphs
     lines = [l.strip() for l in text.split('\n')]
     # Re-group paragraphs
@@ -36,6 +41,12 @@ def clean_commentary_text(text):
         paragraphs.append(' '.join(current_p))
     return '\n\n'.join(paragraphs)
 
+def clean_sloka_line(l):
+    l = re.sub(r'[ \t]+([—–\-])', r'\1', l)
+    l = re.sub(r'[ \t]+(॥|।।)[ \t]*([०-९\d()]+?)[ \t]*(॥|।।)[ \t]*$', r'\1\2\3', l)
+    l = re.sub(r'[ \t]+(॥|।।|[।])[ \t]*$', r'\1', l)
+    return l
+
 def extract_sloka_and_av(chunk):
     lines = [l.strip() for l in chunk.strip().split('\n') if l.strip()]
     if not lines:
@@ -48,10 +59,10 @@ def extract_sloka_and_av(chunk):
     if danda_idx != -1:
         sloka_start = max(0, danda_idx - 1)
         av = ' '.join(lines[:sloka_start]).strip()
-        cleaned_sl_lines = [re.sub(r'[ \t]+([—–\-])', r'\1', l) for l in lines[sloka_start:]]
+        cleaned_sl_lines = [clean_sloka_line(l) for l in lines[sloka_start:]]
         sl = '\n'.join(cleaned_sl_lines).strip()
         return av, sl
-    cleaned_lines = [re.sub(r'[ \t]+([—–\-])', r'\1', l) for l in lines]
+    cleaned_lines = [clean_sloka_line(l) for l in lines]
     return '', '\n'.join(cleaned_lines).strip()
 
 def build_dataset():
@@ -73,13 +84,20 @@ def build_dataset():
     old_verses = {v['order']: v['anvaya'].replace('𑇈', ' ') for v in old_data.get('verses', [])}
 
     # 3. Extract Intro Verses by Kṣemarāja
-    intro4_marker = 'तच्चर्वणादिह बुधा विबुधा भवन्तु ॥ ४ ॥'
-    idx_intro_end = clean_text.find(intro4_marker) + len(intro4_marker)
+    intro4_marker = 'तच्चर्वणादिह बुधा विबुधा भवन्तु॥'
+    idx_intro_end = clean_text.find(intro4_marker)
+    if idx_intro_end != -1:
+        # Move past marker line
+        idx_nl = clean_text.find('\n', idx_intro_end)
+        idx_intro_end = idx_nl if idx_nl != -1 else idx_intro_end + len(intro4_marker)
     intro_section = clean_text[:idx_intro_end].strip()
 
     # 4. Extract Stotra Body
-    end_marker = 'आलिङ्गति नित्यमेव भक्तिभाज इति शिवम् ॥ १२० ॥'
-    idx_end = clean_text.find(end_marker) + len(end_marker)
+    end_marker = 'आलिङ्गति नित्यमेव भक्तिभाज इति शिवम्॥'
+    idx_end = clean_text.find(end_marker)
+    if idx_end != -1:
+        idx_nl = clean_text.find('\n', idx_end)
+        idx_end = idx_nl if idx_nl != -1 else idx_end + len(end_marker)
     body = clean_text[idx_intro_end:idx_end].strip()
 
     # 5. Extract Concluding Section and Appendix II (मूलश्लोकानां संक्षेपेण विषयार्थसंग्रहः)
@@ -105,20 +123,20 @@ def build_dataset():
 
     # Purports for verses 71-84 (where pages 148-149 were missing in printed scan)
     missing_purports = {
-        '७१': 'कर्मकाण्डज्ञानकाण्डयोः सेश्वरत्वसमर्थनपूर्वकं संसारभ्रान्तिसंभेदकारिणे ज्ञानानन्दवपुषे परमेश्वराय नमस्कारः ।',
-        '७२': 'दुरत्ययमायावरणभङ्गेन स्वसंविन्मयमूर्तेः साक्षात्कारप्रार्थनम् ।',
-        '७३': 'सर्वभावानां परमेश्वरैकपारमार्थ्यनिश्चयात् परवैराग्यप्राप्तिकथनम् ।',
-        '७४': 'परमेश्वरस्य सर्वप्रभुत्वेन स्वयमुपक्रान्तस्य समावेशकार्यस्य पूर्णताकरणप्रार्थनम् ।',
-        '७५': 'सर्वज्ञपरमेश्वरस्य सर्वार्थसिद्धिप्रदत्वेन शरणताभ्यर्थनम् ।',
-        '७६': 'अन्यैरविचार्यस्यापि सूक्ष्मपारमेश्वरतत्त्वस्य भगवदेकाग्रचित्तेन विचारणीयताकथनम् ।',
-        '७७': 'परमेश्वराश्रयेणैव सर्वभावावभासनात् विश्वस्य तन्मयताया दृढनिश्चयः ।',
-        '७८': 'परमेश्वरैकनिष्ठचेतसां संसारहेतुभूतसमस्तदोषनिवृत्त्याश्वासनम् ।',
-        '७९': 'पृथिव्यादिमूर्तिषु सर्वमयपरमेश्वरस्वरूपसमावेशप्रार्थनम् ।',
-        '८०': 'सर्वत्र परमेश्वरसमावेशज्ञानवतां संसारमोक्षस्यावश्यंभाविताकथनम् ।',
-        '८१': 'अन्तश्चित्तस्फुरितसमस्तभावानां भगवद्रूपत्वेन लोकोत्तरमहिमवर्णनम् ।',
-        '८२': 'अपरिच्छेद्यभगवन्महिम्नोऽवबोधेनाप्यानन्दविकासवर्णनम् ।',
-        '८३': 'अनुपममहिम्ने सर्वमयाय शिवाय सततप्रणामानुशासनम् ।',
-        '८४': 'भगवत्प्रसादलब्धज्ञानस्यैव परमानन्दहेतुत्वप्रतिपादनम् ।'
+        '७१': 'कर्मकाण्डज्ञानकाण्डयोः सेश्वरत्वसमर्थनपूर्वकं संसारभ्रान्तिसंभेदकारिणे ज्ञानानन्दवपुषे परमेश्वराय नमस्कारः।',
+        '७२': 'दुरत्ययमायावरणभङ्गेन स्वसंविन्मयमूर्तेः साक्षात्कारप्रार्थनम्।',
+        '७३': 'सर्वभावानां परमेश्वरैकपारमार्थ्यनिश्चयात् परवैराग्यप्राप्तिकथनम्।',
+        '७४': 'परमेश्वरस्य सर्वप्रभुत्वेन स्वयमुपक्रान्तस्य समावेशकार्यस्य पूर्णताकरणप्रार्थनम्।',
+        '७५': 'सर्वज्ञपरमेश्वरस्य सर्वार्थसिद्धिप्रदत्वेन शरणताभ्यर्थनम्।',
+        '७६': 'अन्यैरविचार्यस्यापि सूक्ष्मपारमेश्वरतत्त्वस्य भगवदेकाग्रचित्तेन विचारणीयताकथनम्।',
+        '७७': 'परमेश्वराश्रयेणैव सर्वभावावभासनात् विश्वस्य तन्मयताया दृढनिश्चयः।',
+        '७८': 'परमेश्वरैकनिष्ठचेतसां संसारहेतुभूतसमस्तदोषनिवृत्त्याश्वासनम्।',
+        '७९': 'पृथिव्यादिमूर्तिषु सर्वमयपरमेश्वरस्वरूपसमावेशप्रार्थनम्।',
+        '८०': 'सर्वत्र परमेश्वरसमावेशज्ञानवतां संसारमोक्षस्यावश्यंभाविताकथनम्।',
+        '८१': 'अन्तश्चित्तस्फुरितसमस्तभावानां भगवद्रूपत्वेन लोकोत्तरमहिमवर्णनम्।',
+        '८२': 'अपरिच्छेद्यभगवन्महिम्नोऽवबोधेनाप्यानन्दविकासवर्णनम्।',
+        '८३': 'अनुपममहिम्ने सर्वमयाय शिवाय सततप्रणामानुशासनम्।',
+        '८४': 'भगवत्प्रसादलब्धज्ञानस्यैव परमानन्दहेतुत्वप्रतिपादनम्।'
     }
 
     # Find all markers
@@ -222,7 +240,7 @@ def build_dataset():
         viv = clean_commentary_text(v_chunk)
 
         # Append closing marker to sloka
-        sl_with_marker = sl + f' ॥ {num_display} ॥'
+        sl_with_marker = sl + f'॥{num_display}॥'
 
         # Anvaya
         anvaya_text = old_verses.get(o, '')

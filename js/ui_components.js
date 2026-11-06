@@ -24,10 +24,10 @@ const UI = {
       t = t.replace(/[ 𑇈]+([;:?!])/gu, '$1');
       t = t.replace(/([;:?!])[ 𑇈]*/gu, '$1 ');
 
-      // 4. Ensure non-breaking space before dandas (॥ and ।) so dandas never wrap alone to a new line
-      t = t.replace(/([^\s𑇈॥।])[ 𑇈\u00A0]*(॥|।।|[।])/gu, '$1\u00A0$2');
+      // Remove space before dandas (॥ and ।)
+      t = t.replace(/[ \t\r\f\v𑇈\u00A0]+(॥|।।|[।])/gu, '$1');
 
-      // 5. Clean verse numbers inside double dandas: remove spaces and 𑇈 inside
+      // 4. Clean verse numbers inside double dandas: remove spaces and 𑇈 inside
       // e.g. ॥ ५३ ॥ -> ॥५३॥, ॥ ४७ (१) ॥ -> ॥४७(१)॥
       t = t.replace(/(॥|।।)[ 𑇈\u00A0]*([०-९\d\s𑇈()]+?)[ 𑇈\u00A0]*(॥|।।)/gu, (match, d1, inner, d2) => {
         const cleanInner = inner.replace(/[ 𑇈\u00A0]+/gu, '');
@@ -54,8 +54,8 @@ const UI = {
       t = t.replace(/[ \t]+([;:?!])/gu, '$1');
       t = t.replace(/([;:?!])[ \t]+/gu, '$1 ');
 
-      // Ensure non-breaking space before dandas (॥ and ।) so dandas never wrap alone to a new line
-      t = t.replace(/([^\s॥।])[ \t\u00A0]*(॥|।।|[।])/gu, '$1\u00A0$2');
+      // Remove space before dandas (॥ and ।)
+      t = t.replace(/[ \t\u00A0]+(॥|।।|[।])/gu, '$1');
 
       // Remove spaces inside double dandas ॥ ५३ ॥ -> ॥५३॥
       t = t.replace(/(॥|।।)[ \t\u00A0]*([०-९\d\s()]+?)[ \t\u00A0]*(॥|।।)/gu, (match, d1, inner, d2) => {
@@ -115,16 +115,25 @@ const UI = {
 
       result += '\u00AD';
     }
-    return result;
+
+    // Safety: ensure any leading or trailing characters not captured by aksaraRegex (e.g. danda, digits, punctuation) are preserved
+    const firstAksara = aksaras[0];
+    const prefixIdx = word.indexOf(firstAksara);
+    const prefix = prefixIdx > 0 ? word.slice(0, prefixIdx) : '';
+    const matchedLen = prefix.length + aksaras.join('').length;
+    const suffix = matchedLen < word.length ? word.slice(matchedLen) : '';
+
+    return prefix + result + suffix;
   },
 
   /**
    * Add soft hyphens to all long Sanskrit words (length >= 12) in HTML or plain text.
-   * Only matches Devanagari Unicode sequences, leaving HTML tags and attributes untouched.
+   * Only matches Devanagari word characters (\u0900-\u0963, \u0971-\u097F),
+   * explicitly excluding dandas (\u0964, \u0965), digits (\u0966-\u096F), and punctuation.
    */
   addSoftHyphens(str) {
     if (!str) return '';
-    return str.replace(/[\u0900-\u097F\u1CD0-\u1CFF\uA8E0-\uA8FF]{12,}/gu, (match) => {
+    return str.replace(/[\u0900-\u0963\u0971-\u097F\u1CD0-\u1CFF\uA8E0-\uA8FF]{12,}/gu, (match) => {
       const cleanMatch = match.replace(/\u00AD/gu, '');
       return UI.hyphenateDevanagariWord(cleanMatch);
     });
@@ -146,7 +155,7 @@ const UI = {
 
     // 2.5 Support explicit pratīka markings directly in the text:
     // <pr>word</pr>, <strong>word</strong>, <b>word</b>, or **word** (with optional trailing hyphen)
-    const explicitRegex = /(?:\*\*|&lt;pr(?:\s+[^>]*)?&gt;|&lt;strong(?:\s+class="[^"]*")?&gt;|&lt;b&gt;|<pr>|<strong>|<b>)([\s\S]+?)(?:\*\*|&lt;\/pr&gt;|&lt;\/strong&gt;|&lt;\/b&gt;|<\/pr>|<\/strong>|<\/b>)([,;:?!]?)[ \t\r\f\v𑇈]*(?:(?<![-—–])[-—–](?![-—–])[ \t\r\f\v𑇈]*)?/gu;
+    const explicitRegex = /(?:\*\*|&lt;pr(?:\s+[^>]*)?&gt;|&lt;strong(?:\s+class="[^"]*")?&gt;|&lt;b&gt;|<pr>|<strong>|<b>)([\s\S]+?)(?:\*\*|&lt;\/pr&gt;|&lt;\/strong&gt;|&lt;\/b&gt;|<\/pr>|<\/strong>|<\/b>)([;:?!]?)[ \t\r\f\v𑇈]*(?:(?<![-—–])[-—–](?![-—–])[ \t\r\f\v𑇈]*)?/gu;
     t = t.replace(explicitRegex, (match, word, punct) => {
       const cleanWord = word.trim();
       const after = punct ? `${punct} ` : sepSpace;
@@ -159,7 +168,7 @@ const UI = {
       for (const pratika of sorted) {
         if (!pratika) continue;
         const escaped = pratika.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const pRegex = new RegExp(`(?<![<\\/\\w])(${escaped})([,;:?!]?)[ \\t\\r\\f\\v𑇈]*(?:(?<![-—–])[-—–](?![-—–])[ \\t\\r\\f\\v𑇈]*)?`, 'gu');
+        const pRegex = new RegExp(`(?<![<\\/\\w])(${escaped})([;:?!]?)[ \\t\\r\\f\\v𑇈]*(?:(?<![-—–])[-—–](?![-—–])[ \\t\\r\\f\\v𑇈]*)?`, 'gu');
         t = t.replace(pRegex, (m, word, punct) => {
           const after = punct ? `${punct} ` : sepSpace;
           return `<strong class="pratika-bold">${word}</strong>${after}`;
@@ -281,7 +290,6 @@ const UI = {
    */
   renderTextMeta(text) {
     const author = text.author || '';
-    const commentator = text.commentator ? text.commentator.replace('आचार्य-', '') : 'क्षेमराजविवृति';
     const total = String(text.total_verses || 121).replace(/\d/g, d => '०१२३४५६७८९'[d]);
     return `
       <div class="text-meta-minimal">
@@ -289,12 +297,51 @@ const UI = {
         <div class="text-meta-details sanskrit">
           <span>${UI.escapeHTML(author)}</span>
           <span class="meta-sep">•</span>
-          <span>${UI.escapeHTML(commentator)}</span>
-          <span class="meta-sep">•</span>
           <span>${total} श्लोकाः</span>
         </div>
       </div>
     `;
+  },
+
+  /**
+   * Format a single line of Mūla Sloka for HTML presentation.
+   * Renders pāda-ending marks (।, -, and ॥१॥, ॥२॥, etc.)
+   * with a different color and twice as short (font-size: 0.5em) without altering spaces.
+   */
+  formatSlokaLineHTML(line) {
+    if (!line) return '';
+
+    // Match trailing pāda punctuation: e.g. '॥१॥', '॥५६॥', '॥', '।', or '-' / '—' / '–'
+    const endRegex = /((?:(?:॥|।।)[^॥।।\r\n]*?(?:॥|।।)|[।॥]|[-—–]))$/u;
+    const endMatch = line.match(endRegex);
+
+    let textBefore = line;
+    let endPuncHTML = '';
+
+    if (endMatch) {
+      textBefore = line.substring(0, endMatch.index);
+      const punc = endMatch[1];
+      const isHyphen = /^[-—–]$/u.test(punc);
+      const puncClass = isHyphen ? 'sloka-punc sloka-punc-hyphen' : 'sloka-punc';
+      endPuncHTML = `<span class="${puncClass}">${UI.escapeHTML(punc)}</span>`;
+    }
+
+    // Mid-line single danda (if two padas are placed on a single line)
+    const midDandaRegex = /([।])([ \t\r\f\v𑇈\u00A0]+|$)/gu;
+    textBefore = textBefore.replace(midDandaRegex, '<span class="sloka-punc">$1</span>$2');
+
+    // Escape HTML and add soft hyphens to text portions without breaking any span tags
+    if (textBefore.includes('<span class="sloka-punc">')) {
+      const parts = textBefore.split(/(<span class="sloka-punc">.*?<\/span>)/gu);
+      textBefore = parts.map(part => {
+        if (part.startsWith('<span class="sloka-punc">')) return part;
+        return UI.addSoftHyphens(UI.escapeHTML(part));
+      }).join('');
+    } else {
+      textBefore = UI.addSoftHyphens(UI.escapeHTML(textBefore));
+    }
+
+    return textBefore + endPuncHTML;
   },
 
   /**
@@ -335,9 +382,9 @@ const UI = {
 
         ${avataranikaFormatted ? `
           <div class="avataranika-wrap ${isCommentaryCollapsed ? 'collapsed' : ''}" data-section="vivriti">
-            <div class="avataranika-header" onclick="UI.toggleCard(this)" title="अवतरणिका एवं विवृत्ति विस्तारयतु / सङ्कोचयतु (Click to toggle Commentary)">
+            <div class="avataranika-header" onclick="UI.toggleCard(this)" title="विस्तारयतु / सङ्कोचयतु">
               <div class="avataranika-header-left">
-                <span class="avataranika-tag sanskrit">अवतरणिका (भूमिका)</span>
+                <span class="avataranika-tag sanskrit">अवतरणिका</span>
               </div>
               <span class="card-toggle-icon">▼</span>
             </div>
@@ -346,7 +393,7 @@ const UI = {
         ` : ''}
 
         <div class="sloka-text-box">
-          ${lines.map(l => `<div class="sloka-line sanskrit">${UI.addSoftHyphens(UI.escapeHTML(l))}</div>`).join('')}
+          ${lines.map(l => `<div class="sloka-line sanskrit">${UI.formatSlokaLineHTML(l)}</div>`).join('')}
         </div>
 
         <div class="sloka-nav-arrows">
@@ -372,8 +419,7 @@ const UI = {
       <section class="detail-card anvaya-card ${isCollapsed ? 'collapsed' : ''}" data-section="anvaya">
         <div class="card-header" onclick="UI.toggleCard(this)">
           <div class="card-header-left">
-            <span class="card-title anvaya-title sanskrit">🧭 अन्वयः (Anvaya / Prose Order)</span>
-            <span class="card-badge">संस्कृत-पदान्वय</span>
+            <span class="card-title anvaya-title sanskrit">🧭 अन्वयः</span>
           </div>
           <div style="display:flex; align-items:center; gap:0.5rem;">
             <button class="icon-btn" style="width:28px; height:28px; font-size:0.8rem;" onclick="event.stopPropagation(); UI.copyToClipboard('${UI.escapeHTML(anvayaFormatted).replace(/'/g, "\\'")}', 'अन्वयः प्रतिलिपि कृतः')" title="अन्वय कॉपी करें">
@@ -403,8 +449,8 @@ const UI = {
       <section class="detail-card vivriti-card ${isCollapsed ? 'collapsed' : ''}" data-section="vivriti">
         <div class="card-header" onclick="UI.toggleCard(this)">
           <div class="card-header-left">
-            <span class="card-title vivriti-title sanskrit">📜 विवृत्तिः (श्रीक्षेमराजकृतव्याख्या)</span>
-            <span class="card-badge">काश्मीर-संस्कृत-टीका</span>
+            <span class="card-title vivriti-title sanskrit">📜 विवृत्तिः</span>
+            <span class="card-badge">श्रीक्षेमराजकृता</span>
           </div>
           <div style="display:flex; align-items:center; gap:0.5rem;">
             <button class="icon-btn" style="width:28px; height:28px; font-size:0.8rem;" onclick="event.stopPropagation(); UI.copyToClipboard('${UI.escapeHTML(fullTextFormatted).replace(/'/g, "\\'")}', 'विवृत्तिः प्रतिलिपि कृता')" title="विवृत्ति कॉपी करें">

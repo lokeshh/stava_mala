@@ -17,6 +17,7 @@
   --text-muted: #7e8b9f;
   --text-accent: #f27958;
   --text-gold: #f4ca64;
+  --sloka-punc-color: var(--text-gold);
   
   --color-saffron: #d9532f;
   --color-saffron-light: #fbeae5;
@@ -527,6 +528,19 @@ h1, h2, h3, h4, h5 {
   word-break: break-word;
   hyphens: manual;
   -webkit-hyphens: manual;
+}
+
+.sloka-punc {
+  font-size: 0.5em;
+  color: var(--sloka-punc-color, var(--text-gold));
+  display: inline-block;
+  line-height: 1;
+  vertical-align: baseline;
+  letter-spacing: 0;
+}
+
+.sloka-punc-hyphen {
+  vertical-align: 0.22em;
 }
 
 .sloka-meter-tag {

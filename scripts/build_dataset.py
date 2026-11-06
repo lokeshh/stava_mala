@@ -30,7 +30,7 @@ def clean_sandhi_markers(s):
 def to_sharada_sep(text):
     """
     Replaces all spaces in Devanagari text with 𑇈 (Sharada separator).
-    Ensures no trailing/leading 𑇈, and no 𑇈 immediately before । or ॥.
+    Ensures no trailing/leading 𑇈, and no 𑇈 immediately before। or ॥.
     """
     if not text:
         return ""
@@ -38,7 +38,7 @@ def to_sharada_sep(text):
     t = re.sub(r'[ \t\r\f\v𑇈]*([।॥])', r'\1', text)
     # Replace any spaces or existing 𑇈 with a single 𑇈
     t = re.sub(r'[ \t\r\f\v𑇈]+', '𑇈', t)
-    # Ensure no 𑇈 immediately before । or ॥
+    # Ensure no 𑇈 immediately before। or ॥
     t = re.sub(r'𑇈([।॥])', r'\1', t)
     return t.strip('𑇈')
 
