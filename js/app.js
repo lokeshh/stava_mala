@@ -6,7 +6,13 @@
 class AppState {
   constructor() {
     this.textManager = window.textManager;
-    this.currentTextId = localStorage.getItem('trika_current_text') || 'stava_cintamani';
+    let savedTextId = localStorage.getItem('trika_current_text') || 'stava_cintamani';
+    const entry = this.textManager?.registry?.texts?.find(t => t.id === savedTextId);
+    if (savedTextId === 'laghu_stava' || (entry && entry.status === 'coming_soon')) {
+      savedTextId = 'stava_cintamani';
+      localStorage.setItem('trika_current_text', 'stava_cintamani');
+    }
+    this.currentTextId = savedTextId;
     this.currentVerseOrder = parseInt(localStorage.getItem(`trika_last_verse_${this.currentTextId}`) || '1', 10);
     this.bookmarks = new Set(JSON.parse(localStorage.getItem(`trika_bookmarks_${this.currentTextId}`) || '[]'));
     // Default to 'light' (शुभ्र ज्योति) as requested
@@ -107,9 +113,15 @@ class AppState {
     const textId = params.get('text');
     const slokaNum = parseInt(params.get('sloka') || '1', 10);
 
-    if (textId && this.textManager.setText(textId)) {
-      this.currentTextId = textId;
-      this.bookmarks = new Set(JSON.parse(localStorage.getItem(`trika_bookmarks_${this.currentTextId}`) || '[]'));
+    if (textId) {
+      const entry = this.textManager?.registry?.texts?.find(t => t.id === textId);
+      if (entry && entry.status === 'coming_soon') {
+        UI.showToast(`ग्रन्थ "${entry.title}" शीघ्र ही उपलब्ध होगा!`);
+        this.updateHashRoute();
+      } else if (this.textManager.setText(textId)) {
+        this.currentTextId = textId;
+        this.bookmarks = new Set(JSON.parse(localStorage.getItem(`trika_bookmarks_${this.currentTextId}`) || '[]'));
+      }
     }
     if (!isNaN(slokaNum) && slokaNum >= 1 && slokaNum <= this.textManager.getTotalVerses()) {
       this.currentVerseOrder = slokaNum;
@@ -158,6 +170,13 @@ class AppState {
   }
 
   async switchText(textId) {
+    const entry = this.textManager?.registry?.texts?.find(t => t.id === textId);
+    if (entry && entry.status === 'coming_soon') {
+      UI.showToast(`ग्रन्थ "${entry.title}" शीघ्र ही उपलब्ध होगा!`);
+      const selectorEl = document.getElementById('text-selector');
+      if (selectorEl) selectorEl.value = this.currentTextId;
+      return;
+    }
     const loaded = await this.textManager.loadText(textId);
     if (loaded) {
       this.currentTextId = textId;
@@ -169,6 +188,8 @@ class AppState {
       UI.showToast(`ग्रन्थ परिवर्तित: ${this.textManager.getCurrentText().title}`);
     } else {
       UI.showToast(`ग्रन्थ "${textId}" शीघ्र ही उपलब्ध होगा!`);
+      const selectorEl = document.getElementById('text-selector');
+      if (selectorEl) selectorEl.value = this.currentTextId;
     }
   }
 
