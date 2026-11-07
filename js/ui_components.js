@@ -11,7 +11,7 @@ const UI = {
     if (!text) return '';
 
     if (useSharadaSeparator) {
-      // 1. Where there is a comma, replace with placeholder for "𑇈𑇈 " (two separators and a space)
+      // 1. Where there is a comma, replace with placeholder for "𑇈𑇈" (two separators without space)
       let t = text.replace(/[ \t]*,[ \t]*(?=\n|$)/gmu, '\uE001');
       t = t.replace(/[ \t]*,[ \t]*/gu, '\uE000');
 
@@ -47,8 +47,8 @@ const UI = {
       // Normalize any double spaces that might have occurred from punctuation spacing
       t = t.replace(/ {2,}/g, ' ');
 
-      // 8. Restore comma breaks as two separators and a space ("𑇈𑇈 ")
-      t = t.replace(/\uE000/gu, '𑇈𑇈 ');
+      // 8. Restore comma breaks as two separators without space ("𑇈𑇈")
+      t = t.replace(/\uE000/gu, '𑇈𑇈');
       t = t.replace(/\uE001/gu, '𑇈𑇈');
 
       return t.trim();
@@ -92,6 +92,14 @@ const UI = {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
+  },
+
+  /**
+   * Convert Arabic digits (0-9) to Devanagari numerals (०-९)
+   */
+  toDevanagariDigits(num) {
+    if (num === null || num === undefined) return '';
+    return String(num).replace(/\d/g, d => '०१२३४५६७८९'[d]);
   },
 
   /**
@@ -298,7 +306,7 @@ const UI = {
    */
   renderTextMeta(text) {
     const author = text.author || '';
-    const total = String(text.total_verses || 121).replace(/\d/g, d => '०१२३४५६७८९'[d]);
+    const total = UI.toDevanagariDigits(text.total_verses || 121);
     return `
       <div class="text-meta-minimal">
         <h1 class="text-title-minimal sanskrit">${UI.escapeHTML(text.title)}</h1>
@@ -361,11 +369,12 @@ const UI = {
     const lines = slokaFormatted.split('\n');
     const avataranikaFormatted = verse.avataranika ? UI.formatCommentaryHTML(verse.avataranika, useSharada, verse) : '';
     const vishayarthaFormatted = verse.vishayartha_sangraha ? UI.formatCommentaryHTML(verse.vishayartha_sangraha, useSharada, verse) : '';
+    const totalVerses = UI.toDevanagariDigits(window.textManager ? window.textManager.getTotalVerses() : 121);
 
     return `
       <article class="sloka-display-card" id="current-sloka-card">
         <div class="sloka-header-row">
-          <div class="sloka-num-badge sanskrit">श्लोक ${verse.number} <span class="ms-tag">(${verse.order} / ${window.textManager ? window.textManager.getTotalVerses() : 121})</span></div>
+          <div class="sloka-num-badge sanskrit">श्लोकसङ्ख्या ${verse.number} / ${totalVerses}</div>
           <div class="sloka-card-actions">
             <button class="icon-btn ${isBookmarked ? 'active' : ''}" id="btn-toggle-bookmark" title="बुकमार्क करें (Bookmark [B])" aria-label="Bookmark">
               ${isBookmarked ? '★' : '☆'}

@@ -228,7 +228,9 @@ class AppState {
 
     const progressText = document.getElementById('nav-progress-text');
     if (progressText) {
-      progressText.textContent = `श्लोक ${this.currentVerseOrder} / ${total} (${percent}%)`;
+      const currentDev = UI.toDevanagariDigits(this.currentVerseOrder);
+      const totalDev = UI.toDevanagariDigits(total);
+      progressText.textContent = `श्लोक ${currentDev} / ${totalDev} (${percent}%)`;
     }
 
     const progressBar = document.getElementById('nav-progress-fill');

@@ -11,12 +11,14 @@
   --border-subtle: #2d3546;
   --border-accent: #b3543b;
   --border-gold: #c99a4c;
+  --border-anvaya: #34d399;
   
   --text-primary: #f2f5f9;
   --text-secondary: #b5c0d0;
   --text-muted: #7e8b9f;
   --text-accent: #f27958;
   --text-gold: #f4ca64;
+  --text-anvaya: #34d399;
   --sloka-punc-color: var(--text-gold);
   
   --color-saffron: #d9532f;
@@ -56,12 +58,14 @@
   --border-subtle: #dfd3b8;
   --border-accent: #a84824;
   --border-gold: #9f722a;
+  --border-anvaya: #2d6a4f;
   
   --text-primary: #2c221a;
   --text-secondary: #5e4c3e;
   --text-muted: #8c7766;
   --text-accent: #9a3212;
   --text-gold: #825b1b;
+  --text-anvaya: #1b4332;
   
   --shadow-sm: 0 2px 4px rgba(80, 50, 20, 0.08);
   --shadow-md: 0 4px 12px rgba(80, 50, 20, 0.12);
@@ -79,12 +83,14 @@
   --border-subtle: #20293a;
   --border-accent: #e06847;
   --border-gold: #e2b358;
+  --border-anvaya: #4ade80;
   
   --text-primary: #f8fafc;
   --text-secondary: #cbd5e1;
   --text-muted: #64748b;
   --text-accent: #fb923c;
   --text-gold: #fde047;
+  --text-anvaya: #4ade80;
 }
 
 /* Theme: Shubhram (Clean Paper Light) */
@@ -97,12 +103,14 @@
   --border-subtle: #e2e8f0;
   --border-accent: #dc2626;
   --border-gold: #d97706;
+  --border-anvaya: #15803d;
   
   --text-primary: #0f172a;
   --text-secondary: #334155;
   --text-muted: #64748b;
   --text-accent: #b91c1c;
   --text-gold: #b45309;
+  --text-anvaya: #166534;
   
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
   --shadow-md: 0 4px 10px rgba(0,0,0,0.08);
@@ -120,12 +128,14 @@
   --border-subtle: #e0e7ff;
   --border-accent: #6366f1;
   --border-gold: #8b5cf6;
+  --border-anvaya: #059669;
   
   --text-primary: #0f172a;
   --text-secondary: #334155;
   --text-muted: #64748b;
   --text-accent: #4338ca;
   --text-gold: #6d28d9;
+  --text-anvaya: #047857;
   
   --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
   --shadow-md: 0 4px 10px rgba(67, 56, 202, 0.08);
@@ -143,12 +153,14 @@
   --border-subtle: #274334;
   --border-accent: #38a169;
   --border-gold: #d69e2e;
+  --border-anvaya: #22c55e;
 
   --text-primary: #f0f7f2;
   --text-secondary: #b7d6c2;
   --text-muted: #71957e;
   --text-accent: #48bb78;
   --text-gold: #ecc94b;
+  --text-anvaya: #22c55e;
 
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -166,12 +178,14 @@
   --border-subtle: #24335c;
   --border-accent: #e27d53;
   --border-gold: #f6c85f;
+  --border-anvaya: #34d399;
 
   --text-primary: #f2f5fd;
   --text-secondary: #b6c4e5;
   --text-muted: #7282a8;
   --text-accent: #f97316;
   --text-gold: #fcd34d;
+  --text-anvaya: #34d399;
 
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
@@ -189,12 +203,14 @@
   --border-subtle: #573322;
   --border-accent: #ea580c;
   --border-gold: #f59e0b;
+  --border-anvaya: #34d399;
 
   --text-primary: #fff7ed;
   --text-secondary: #fed7aa;
   --text-muted: #a37c67;
   --text-accent: #fb923c;
   --text-gold: #fde047;
+  --text-anvaya: #34d399;
 
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -669,7 +685,7 @@ h1, h2, h3, h4, h5 {
 
 /* Special Highlighting for Anvaya */
 .anvaya-card {
-  border-left: 4px solid var(--color-gold);
+  border-left: 4px solid var(--border-anvaya);
   background: linear-gradient(180deg, var(--bg-card), var(--bg-secondary));
   box-shadow: var(--shadow-md);
 }
@@ -942,7 +958,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .anvaya-title {
-  color: var(--text-gold);
+  color: var(--text-anvaya);
   font-size: 1.15rem;
 }
 
@@ -984,7 +1000,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .anvaya-highlight {
-  background: rgba(212, 175, 55, 0.1);
+  background: rgba(21, 128, 61, 0.12);
   padding: 0.1rem 0.3rem;
   border-radius: 4px;
 }
