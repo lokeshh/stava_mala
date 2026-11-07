@@ -282,6 +282,34 @@ const UI = {
     document.body.removeChild(ta);
   },
 
+  copyVivriti(event) {
+    if (event) {
+      if (typeof event.preventDefault === 'function') event.preventDefault();
+      if (typeof event.stopPropagation === 'function') event.stopPropagation();
+    }
+    const app = window.appState;
+    if (!app || !app.textManager) return;
+    const verse = app.textManager.getVerse(app.currentVerseOrder);
+    if (verse && verse.vivriti) {
+      const formatted = UI.formatDevanagari(verse.vivriti, app.useSharadaSeparator);
+      UI.copyToClipboard(formatted, "विवृतिः प्रतिलिपि कृता");
+    }
+  },
+
+  copyAnvaya(event) {
+    if (event) {
+      if (typeof event.preventDefault === 'function') event.preventDefault();
+      if (typeof event.stopPropagation === 'function') event.stopPropagation();
+    }
+    const app = window.appState;
+    if (!app || !app.textManager) return;
+    const verse = app.textManager.getVerse(app.currentVerseOrder);
+    if (verse && verse.anvaya) {
+      const formatted = UI.formatDevanagari(verse.anvaya, false);
+      UI.copyToClipboard(formatted, "अन्वयः प्रतिलिपि कृतः");
+    }
+  },
+
   /**
    * Show toast notification
    */
@@ -431,7 +459,6 @@ const UI = {
    * Render Anvaya Card (Always uses standard clean spaces for readability)
    */
   renderAnvayaCard(verse, isCollapsed) {
-    const anvayaFormatted = UI.formatDevanagari(verse.anvaya, false);
     return `
       <section class="detail-card anvaya-card ${isCollapsed ? 'collapsed' : ''}" data-section="anvaya">
         <div class="card-header" onclick="UI.toggleCard(this)">
@@ -439,7 +466,7 @@ const UI = {
             <span class="card-title anvaya-title sanskrit">🧭 अन्वयः</span>
           </div>
           <div style="display:flex; align-items:center; gap:0.5rem;">
-            <button class="icon-btn" style="width:28px; height:28px; font-size:0.8rem;" onclick="event.stopPropagation(); UI.copyToClipboard('${UI.escapeHTML(anvayaFormatted).replace(/'/g, "\\'")}', 'अन्वयः प्रतिलिपि कृतः')" title="अन्वय कॉपी करें">
+            <button class="icon-btn" id="btn-copy-anvaya" style="width:28px; height:28px; font-size:0.8rem;" onclick="UI.copyAnvaya(event)" title="अन्वय कॉपी करें">
               ⎘
             </button>
             <span class="card-toggle-icon">▼</span>
@@ -460,17 +487,16 @@ const UI = {
   renderVivritiCard(verse, isCollapsed, useSharada = false) {
     if (!verse.vivriti) return '';
     const paragraphs = verse.vivriti.split('\n\n').filter(p => p.trim());
-    const fullTextFormatted = UI.formatDevanagari(verse.vivriti, useSharada);
 
     return `
       <section class="detail-card vivriti-card ${isCollapsed ? 'collapsed' : ''}" data-section="vivriti">
         <div class="card-header" onclick="UI.toggleCard(this)">
           <div class="card-header-left">
-            <span class="card-title vivriti-title sanskrit">📜 विवृत्तिः</span>
+            <span class="card-title vivriti-title sanskrit">📜 विवृतिः</span>
             <span class="card-badge">श्रीक्षेमराजकृता</span>
           </div>
           <div style="display:flex; align-items:center; gap:0.5rem;">
-            <button class="icon-btn" style="width:28px; height:28px; font-size:0.8rem;" onclick="event.stopPropagation(); UI.copyToClipboard('${UI.escapeHTML(fullTextFormatted).replace(/'/g, "\\'")}', 'विवृत्तिः प्रतिलिपि कृता')" title="विवृत्ति कॉपी करें">
+            <button class="icon-btn" id="btn-copy-vivriti" style="width:28px; height:28px; font-size:0.8rem;" onclick="UI.copyVivriti(event)" title="विवृति कॉपी करें">
               ⎘
             </button>
             <span class="card-toggle-icon">▼</span>

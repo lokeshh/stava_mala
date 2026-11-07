@@ -272,6 +272,16 @@ class AppState {
       btnCopy.onclick = () => UI.copyToClipboard(UI.formatDevanagari(verse.sloka, true), "श्लोकः प्रतिलिपि कृतः (Shloka copied)");
     }
 
+    const btnCopyAnvaya = document.getElementById('btn-copy-anvaya');
+    if (btnCopyAnvaya) {
+      btnCopyAnvaya.onclick = (e) => UI.copyAnvaya(e);
+    }
+
+    const btnCopyVivriti = document.getElementById('btn-copy-vivriti');
+    if (btnCopyVivriti) {
+      btnCopyVivriti.onclick = (e) => UI.copyVivriti(e);
+    }
+
     const btnPrev = document.getElementById('btn-prev-sloka');
     if (btnPrev) {
       btnPrev.onclick = () => this.prevVerse();
