@@ -71,6 +71,7 @@ class AppState {
   savePreferences() {
     localStorage.setItem('trika_theme', this.theme);
     localStorage.setItem('trika_theme_v2', this.theme);
+    localStorage.setItem('trika_theme_v3', this.theme);
     localStorage.setItem('trika_font_scale', this.fontScale.toString());
     localStorage.setItem('trika_use_sharada_separator', this.useSharadaSeparator.toString());
     localStorage.setItem('trika_use_sharada_separator_v2', this.useSharadaSeparator.toString());
@@ -82,11 +83,7 @@ class AppState {
 
   applyTheme(theme) {
     this.theme = theme;
-    if (theme === 'default') {
-      document.documentElement.removeAttribute('data-theme');
-    } else {
-      document.documentElement.setAttribute('data-theme', theme);
-    }
+    document.documentElement.setAttribute('data-theme', theme);
     const themeSelect = document.getElementById('select-theme');
     if (themeSelect) themeSelect.value = theme;
     this.savePreferences();
