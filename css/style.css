@@ -2,7 +2,90 @@
 @import url('fonts.css');
 
 :root {
-  /* Default Theme: Kashmir Shaiva (Sandalwood & Saffron Slate) */
+  /* Default Base Theme: Vedic Parchment (सात्त्विक - Light Cream, Inspired by Mokṣopāya Reader) */
+  --bg-primary: #fbf8f3;
+  --bg-secondary: #f5efe4;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fcfbf8;
+  --bg-accent: #fef3c7;
+  --border-subtle: #e9e0d4;
+  --border-accent: #b45309;
+  --border-gold: #d97706;
+  --border-anvaya: #15803d;
+
+  --text-primary: #231d17;
+  --text-secondary: #6b5e51;
+  --text-muted: #998774;
+  --text-accent: #92400e;
+  --text-gold: #b45309;
+  --text-anvaya: #166534;
+  --sloka-punc-color: #b45309;
+
+  --badge-bg: linear-gradient(135deg, #fef3c7 0%, #fae8b4 100%);
+  --badge-text: #78350f;
+  --badge-border: #f59e0b;
+
+  --color-saffron: #d9532f;
+  --color-saffron-light: #fbeae5;
+  --color-gold: #d4af37;
+  --color-rudraksha: #5c2c16;
+  --color-success: #38a169;
+  --color-info: #3182ce;
+
+  --font-sanskrit: 'Siddhanta', 'Noto Sans Devanagari', 'Kokila', serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  --shadow-sm: 0 1px 3px rgba(35, 29, 23, 0.05);
+  --shadow-md: 0 4px 14px rgba(35, 29, 23, 0.08);
+  --shadow-lg: 0 10px 30px rgba(35, 29, 23, 0.12);
+  --shadow-glow: 0 0 16px rgba(180, 83, 9, 0.16);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --sloka-font-size: 2.1rem;
+  --anvaya-font-size: 1.35rem;
+  --vishayartha-font-size: 1.12rem;
+  --avataranika-font-size: 1.08rem;
+  --vivriti-font-size: 1.18rem;
+}
+
+/* Theme: Parchment (सात्त्विक - Exact Mokṣopāya Reader Light Cream Theme) */
+[data-theme="parchment"],
+[data-theme="vedic_parchment"] {
+  --bg-primary: #fbf8f3;
+  --bg-secondary: #f5efe4;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fcfbf8;
+  --bg-accent: #fef3c7;
+  --border-subtle: #e9e0d4;
+  --border-accent: #b45309;
+  --border-gold: #d97706;
+  --border-anvaya: #15803d;
+
+  --text-primary: #231d17;
+  --text-secondary: #6b5e51;
+  --text-muted: #998774;
+  --text-accent: #92400e;
+  --text-gold: #b45309;
+  --text-anvaya: #166534;
+  --sloka-punc-color: #b45309;
+
+  --badge-bg: linear-gradient(135deg, #fef3c7 0%, #fae8b4 100%);
+  --badge-text: #78350f;
+  --badge-border: #f59e0b;
+
+  --shadow-sm: 0 1px 3px rgba(35, 29, 23, 0.05);
+  --shadow-md: 0 4px 14px rgba(35, 29, 23, 0.08);
+  --shadow-lg: 0 10px 30px rgba(35, 29, 23, 0.12);
+  --shadow-glow: 0 0 16px rgba(180, 83, 9, 0.16);
+}
+
+/* Theme: Kashmir Shaiva (त्रिक सौम्य - Sandalwood & Saffron Slate Dark) */
+[data-theme="shaiva"],
+[data-theme="default"] {
   --bg-primary: #12151c;
   --bg-secondary: #1a1e27;
   --bg-card: #202633;
@@ -12,7 +95,7 @@
   --border-accent: #b3543b;
   --border-gold: #c99a4c;
   --border-anvaya: #34d399;
-  
+
   --text-primary: #f2f5f9;
   --text-secondary: #b5c0d0;
   --text-muted: #7e8b9f;
@@ -20,57 +103,15 @@
   --text-gold: #f4ca64;
   --text-anvaya: #34d399;
   --sloka-punc-color: var(--text-gold);
-  
-  --color-saffron: #d9532f;
-  --color-saffron-light: #fbeae5;
-  --color-gold: #d4af37;
-  --color-rudraksha: #5c2c16;
-  --color-success: #38a169;
-  --color-info: #3182ce;
-  
-  --font-sanskrit: 'Siddhanta', 'Noto Sans Devanagari', 'Kokila', serif;
-  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  
+
+  --badge-bg: rgba(217, 83, 47, 0.1);
+  --badge-text: var(--text-accent);
+  --badge-border: rgba(217, 83, 47, 0.3);
+
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.45);
   --shadow-glow: 0 0 16px rgba(217, 83, 47, 0.25);
-  
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-full: 9999px;
-  
-  --sloka-font-size: 2.1rem;
-  --anvaya-font-size: 1.35rem;
-  --vishayartha-font-size: 1.12rem;
-  --avataranika-font-size: 1.08rem;
-  --vivriti-font-size: 1.18rem;
-}
-
-/* Theme: Bhūrjapatra (Birchbark Parchment) */
-[data-theme="parchment"] {
-  --bg-primary: #f5eedc;
-  --bg-secondary: #eee4cb;
-  --bg-card: #fffbf2;
-  --bg-card-hover: #faf3e1;
-  --bg-accent: #fae8d4;
-  --border-subtle: #dfd3b8;
-  --border-accent: #a84824;
-  --border-gold: #9f722a;
-  --border-anvaya: #2d6a4f;
-  
-  --text-primary: #2c221a;
-  --text-secondary: #5e4c3e;
-  --text-muted: #8c7766;
-  --text-accent: #9a3212;
-  --text-gold: #825b1b;
-  --text-anvaya: #1b4332;
-  
-  --shadow-sm: 0 2px 4px rgba(80, 50, 20, 0.08);
-  --shadow-md: 0 4px 12px rgba(80, 50, 20, 0.12);
-  --shadow-lg: 0 8px 24px rgba(80, 50, 20, 0.16);
-  --shadow-glow: 0 0 16px rgba(168, 72, 36, 0.15);
 }
 
 /* Theme: Kailash Nisha (Deep Dark) */
@@ -516,11 +557,11 @@ h1, h2, h3, h4, h5 {
 .sloka-num-badge {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--text-accent);
-  background: rgba(217, 83, 47, 0.1);
+  color: var(--badge-text, var(--text-accent));
+  background: var(--badge-bg, rgba(217, 83, 47, 0.1));
   padding: 0.3rem 0.8rem;
   border-radius: var(--radius-full);
-  border: 1px solid rgba(217, 83, 47, 0.3);
+  border: 1px solid var(--badge-border, rgba(217, 83, 47, 0.3));
 }
 
 .ms-tag {
@@ -626,10 +667,11 @@ h1, h2, h3, h4, h5 {
 
 .key-hint {
   font-size: 0.72rem;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--bg-card);
+  color: var(--text-muted);
   padding: 0.15rem 0.4rem;
   border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--border-subtle);
 }
 
 /* Tabs & Sections Navigation */

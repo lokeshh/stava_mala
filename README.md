@@ -22,14 +22,16 @@
   - `fonts/siddhanta.ttf` द्वारा प्रामाणिक और सुन्दर देवनागरी संयुक्ताक्षरों, विसर्ग, अवग्रह और अनुस्वार का प्रदर्शन।
   - हेडर में एक-क्लिक `[ 𑇈 विभाजक ]` टॉगल बटन: इच्छानुसार शब्दों के मध्य **`𑇈` (U+111C8 शारदा विभाजक)** अथवा सामान्य रिक्त स्थान (space) का सहज चयन।
 - **बहु-ग्रन्थ वास्तुकला (Multi-Text Architecture)**: एक क्लिक में स्तवचिन्तामणि से लघुस्तव या अन्य ग्रन्थों में स्विच करने की सुविधा।
-- **वर्णयोजना (7 Diverse & Aesthetic Themes)**:
-  - 🕉️ *त्रिक सौम्य* (Default: Kashmiri Sandalwood & Saffron Slate)
+- **वर्णयोजना (9 Diverse & Aesthetic Themes)**:
+  - ☀️ *शुभ्र ज्योति* (Pure Paper Light Mode)
+  - 📜 *सात्त्विक (Parchment)* (Light Vedic Cream & Amber — Mokṣopāya Reader Inspired)
+  - 🌌 *नील ज्योति* (Chidākāśa Serene Light Blue & Indigo)
+  - 🕉️ *त्रिक सौम्य* (Kashmiri Sandalwood & Saffron Slate)
   - 📜 *भूर्जपत्र* (Birchbark Manuscript Parchment)
   - 🌲 *शारदा वन* (Sharada Peeth Himalayan Pine & Moss Green)
   - 🌌 *भैरव सन्ध्या* (Bhairava Midnight Twilight & Radiant Copper)
   - 🪔 *काश्मीर कुङ्कुम* (Kashmiri Saffron & Sandalwood Glow)
   - 🌙 *कैलास निशा* (Kailash Deep Dark Mode)
-  - ☀️ *शुभ्र ज्योति* (Pure Paper Light Mode)
 - **कीबोर्ड संचालन (Keyboard Navigation)**:
   - `[←]` अथवा `[J]`: पूर्व श्लोक
   - `[→]` अथवा `[K]`: अग्रिम श्लोक
