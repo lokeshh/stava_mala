@@ -15,9 +15,12 @@ class AppState {
     this.currentTextId = savedTextId;
     this.currentVerseOrder = parseInt(localStorage.getItem(`trika_last_verse_${this.currentTextId}`) || '1', 10);
     this.bookmarks = new Set(JSON.parse(localStorage.getItem(`trika_bookmarks_${this.currentTextId}`) || '[]'));
-    // Default to 'light' (शुभ्र ज्योति) as requested
-    const savedTheme = localStorage.getItem('trika_theme_v2');
-    this.theme = savedTheme || 'light';
+    // Default to Mokṣopāya-inspired light 'parchment' (सात्त्विक) theme
+    let savedTheme = localStorage.getItem('trika_theme_v3') || localStorage.getItem('trika_theme_v2');
+    if (!savedTheme || savedTheme === 'default' || savedTheme === 'vedic_parchment') {
+      savedTheme = 'parchment';
+    }
+    this.theme = savedTheme;
     this.fontScale = parseFloat(localStorage.getItem('trika_font_scale') || '1.0');
     // Default to true (Sharada separator in Mūla Shloka) as requested
     const savedSep = localStorage.getItem('trika_use_sharada_separator_v2');
